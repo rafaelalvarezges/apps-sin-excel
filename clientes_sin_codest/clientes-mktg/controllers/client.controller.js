@@ -1,7 +1,7 @@
 const db = require("../models");
 const Client = db.clients;
 
-// Retrieve all Clients from the database.
+// Extraer todos los clientes de la base de datos.
 exports.findAll = (req, res) => {
     const title = req.query.title;
     var condition = title ? { title: { $regex: new RegExp(title), $options: "i" } } : {};
@@ -13,54 +13,48 @@ exports.findAll = (req, res) => {
       .catch(err => {
         res.status(500).send({
           message:
-            err.message || "Some error occurred while retrieving clients."
+            err.message || "Error al extraer los clientes de la base de datos."
         });
       });
 };
 
-// Find a single Client with an id
+// Extraer Cliente segun id. 
 exports.findOne = (req, res) => {
   const id = req.params.id;
 
   Client.findById(id)
     .then(data => {
       if (!data)
-        res.status(404).send({ message: "Not found Client with id " + id });
+        res.status(404).send({ message: "No se ha encontrado el cliente con id " + id });
       else res.send(data);
     })
     .catch(err => {
       res
         .status(500)
-        .send({ message: "Error retrieving Client with id=" + id });
+        .send({ message: "Error al extraer el Cliente con id=" + id });
     });
 };
 
-// Update a Client by the id in the request
+// Actualizamos el cliente segun la id
 exports.update = (req, res) => {
-  console.log("update")
-  const id = req.params.id;
-  console.log(req.body)
-  // console.log(req.data)
-  console.log("id: "  + id)
   if (!req.body) {
     return res.status(400).send({
-      message: "Data to update can not be empty!"
+      message: "Los datos a actualizar no pueden estar vacios!"
     });
   }
-  console.log(req.body)
 
-
+  const id = req.params.id;
   Client.findByIdAndUpdate(id, req.body, { useFindAndModify: true })
     .then(data => {
       if (!data) {
         res.status(404).send({
-          message: `Cannot update Client with id=${id}. Maybe Client was not found!`
+          message: `No se ha podido actualizar el cliente con id=${id}. No se ha encontrado en la base de datos`
         });
-      } else res.send({ message: "Client was updated successfully." });
+      } else res.send({ message: "El cliente se ha creado correctamente." });
     })
     .catch(err => {
       res.status(500).send({
-        message: "Error updating Client with id=" + id
+        message: "Error al actualizar el cliente con id=" + id
       });
     });
 };
