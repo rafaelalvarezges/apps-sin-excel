@@ -1,0 +1,47 @@
+.TablaClientes{
+    font-family: "Segoe UI", "Segoe UI Web (West European)", "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif;
+    -webkit-font-smoothing: antialiased;
+    font-size: 14px;
+    font-weight: 600;
+
+    .form-control:focus {
+        color: #495057;
+        background-color: #fff;
+         border-color: none;
+        outline: 0;
+         box-shadow: none;
+    }
+
+    td :focus{
+        outline: none;
+        font-family: "Segoe UI", "Segoe UI Web (West European)", "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif;
+        -webkit-font-smoothing: antialiased;
+        font-size: 14px;
+        font-weight: 600;
+    }
+    input :focus{
+        outline:none;
+    }
+
+    .react-bootstrap-table-pagination{
+        padding: 10px !important;
+    }
+
+    .table {
+        overflow: scroll;
+        display: block;
+        table-layout: fixed !important;
+        width: auto;
+        // position: relative;
+        }
+    .react-bootstrap-table-pagination-total{
+        padding: 10px !important;
+    }
+    th{
+        position: sticky;
+        top: 0;
+    }
+}
+
+
+
