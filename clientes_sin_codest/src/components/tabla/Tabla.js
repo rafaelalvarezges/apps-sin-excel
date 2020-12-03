@@ -42,8 +42,10 @@ function Tabla(props) {
         dataField: column.dataField,
         text: column.text,
         sort: column.sort,
-        filter: textFilter({ placeholder: column.key }),
-        headerStyle: (col, colIndex) => { return column.headerOps }
+        filter: textFilter({ placeholder: "Introducir " + column.text }),
+        headerStyle: column.headerOps,
+        align: column.align,
+        editable: column.editable
       }
       columns.push(col)
     });
@@ -54,7 +56,7 @@ function Tabla(props) {
   async function saveCell(row) {
 
     console.log(row)
-    
+
     let res = await clientService.update(row['_id'], row).then((res, err) => {
       if (err) console.log(err)
       console.log(res)
@@ -68,40 +70,42 @@ function Tabla(props) {
 
       {rows.length != 0 ?
         <ToolkitProvider
-          keyField = "_id"
-          search = {true}
-          data = {rows}
-          columns = {cols}
+          keyField="_id"
+          search={true}
+          data={rows}
+          columns={cols}
         >
           {
             props => (
               <div>
-                <nav className = "navbar navbar-light bg-light">
+                <nav className="navbar navbar-light bg-light">
 
-                  <SearchBar {...props.searchProps} />
+                  <SearchBar {...props.searchProps}
+                    placeholder="Buscar"
+                  />
 
                 </nav>
 
                 <BootstrapTable
                   {...props.baseProps}
-                  keyField = '_id'
-                  data = {rows}
-                  columns = {cols}
-                  defaultSorted = {defaultSorted}
+                  keyField='_id'
+                  data={rows}
+                  columns={cols}
+                  defaultSorted={defaultSorted}
                   //  hover
                   //  striped
-                  bordered = {false}
+                  bordered={false}
                   bootstrap4
-                  pagination = {paginationFactory(options)}
-                  filter = {filterFactory()}
-                  noDataIndication = "No se han encontrado resultados"
-                  headerClasses = {style.headerClass}
-                  wrapperClasses = "table-responsive"
-                  cellEdit = {cellEditFactory(
+                  pagination={paginationFactory(options)}
+                  filter={filterFactory()}
+                  noDataIndication="No se han encontrado resultados"
+                  headerClasses={style.headerClass}
+                  wrapperClasses="table-responsive"
+                  cellEdit={cellEditFactory(
                     {
                       mode: 'click',
                       blurToSave: true,
-                     
+
                       afterSaveCell: (oldValue, newValue, row, column) => {
                         saveCell(row)
                       }
