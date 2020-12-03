@@ -59,7 +59,7 @@ export default class TablaClientes extends React.Component<ITablaClientesProps, 
             }} />
           </nav>
 
-          {this.state.data.length != 0 ?
+          {this.state.data.length !== 0 ?
 
             <Tabla
               rows={this.state.data}

@@ -1,10 +1,8 @@
-import logo from './logo.svg';
 import TablaClientes from './components/tablaClientes/TablaClientes';
 import Nav from './components/nav/Nav';
-import Tabla from './components/tabla/Tabla';
 import './App.css';
 import React from 'react';
-import { BrowserRouter, Switch, Route, Link } from 'react-router-dom';
+import { BrowserRouter, Switch, Route } from 'react-router-dom';
 
 function App() {
   return (

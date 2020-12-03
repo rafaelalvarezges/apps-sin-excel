@@ -5,9 +5,6 @@ import reportWebVitals from './reportWebVitals';
 import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
 
 // Componentes
-import TablaClientes from './components/tablaClientes/TablaClientes';
-import Nav from './components/nav/Nav';
-import Tabla from './components/tabla/Tabla';
 import App from './App';
 
 ReactDOM.render(

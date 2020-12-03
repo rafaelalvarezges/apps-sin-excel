@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import cellEditFactory from 'react-bootstrap-table2-editor';
 import BootstrapTable from 'react-bootstrap-table-next';
-import filterFactory, { textFilter, selectFilter } from 'react-bootstrap-table2-filter';
+import filterFactory, { textFilter } from 'react-bootstrap-table2-filter';
 import paginationFactory from 'react-bootstrap-table2-paginator';
 import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit';
 import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
@@ -12,8 +12,8 @@ const { SearchBar } = Search;
 
 function Tabla(props) {
 
-  const [rows, setRows] = useState(props.rows);
-  const [cols, setCols] = useState(getCols());
+  const [rows] = useState(props.rows);
+  const [cols] = useState(getCols());
 
   const defaultSorted = [{
     dataField: '_id',
@@ -57,7 +57,7 @@ function Tabla(props) {
 
     console.log(row)
 
-    let res = await clientService.update(row['_id'], row).then((res, err) => {
+    await clientService.update(row['_id'], row).then((res, err) => {
       if (err) console.log(err)
       console.log(res)
       return res
@@ -68,7 +68,7 @@ function Tabla(props) {
 
     <div className={style.TablaClientes}>
 
-      {rows.length != 0 ?
+      {rows.length !== 0 ?
         <ToolkitProvider
           keyField="_id"
           search={true}
