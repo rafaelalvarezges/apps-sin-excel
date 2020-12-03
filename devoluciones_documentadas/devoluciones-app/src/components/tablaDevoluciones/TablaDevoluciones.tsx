@@ -1,4 +1,3 @@
-
 import * as React from 'react';
 import styles from './TablaDevoluciones.module.scss';
 import { ITablaDevolucionesProps } from './ITablaDevolucionesProps';
@@ -10,16 +9,18 @@ import { DefaultButton } from 'office-ui-fabric-react';
 import ExportExcel from '../../services/exportFromJson';
 
 const cols = [
-  { dataField: 'pdv', text: 'PDV', sort: true, headerOps: { width: '90px', textAlign: 'center' } },
-  { dataField: 'global', text: 'Global', sort: true, headerOps: { width: '90px', textAlign: 'center' } },
-  { dataField: 'codcli', text: 'Cliente', sort: true, headerOps: { width: '90px', textAlign: 'center' } },
-  { dataField: 'nombre', text: 'Nombre', sort: true, headerOps: { width: '300px', overflow: 'hidden' } },
-  { dataField: 'cadena', text: 'Cadena', sort: true, headerOps: { width: '150px', textAlign: 'center' } },
-  { dataField: 'codest', text: 'Codest', sort: true, headerOps: { width: '180px', textAlign: 'center' } },
-  { dataField: 'nomext', text: 'C.Ext', sort: true, headerOps: { width: '240px' } },
-  { dataField: 'nomdrv', text: 'DRV', sort: true, headerOps: { width: '220px', textAlign: 'center' } },
-  { dataField: 'vta_anio_ant', text: 'Venta 2019', sort: true, headerOps: { width: '100px', textAlign: 'center' } },
-  { dataField: 'vta_anio_actual', text: 'Venta 2020', sort: true, headerOps: { width: '100px', textAlign: 'center' } },
+  { dataField: 'period',      text: 'Periodo',        sort: true, headerOps: { width: '90px',  textAlign: 'center' },   editable: false,  editor: { type:"text" } },
+  { dataField: 'codemp',      text: 'PDV',            sort: true, headerOps: { width: '70px',  textAlign: 'center' },   editable: false,  editor: { type:"text" } },
+  { dataField: 'codpro',      text: 'Codpro',         sort: true, headerOps: { width: '70px',  textAlign: 'center' },   editable: false,  editor: { type:"text" } },
+  { dataField: 'docume',      text: 'Documento',      sort: true, headerOps: { width: '90px',  overflow:  'hidden' },   editable: false,  editor: { type:"text" } },
+  { dataField: 'implin',      text: 'Importe',        sort: true, headerOps: { width: '90px',  textAlign: 'center' },   editable: false,  editor: { type:"text" } },
+  { dataField: 'fecalb',      text: 'Fecha albarán',  sort: true, headerOps: { width: '100px', textAlign: 'center' },   editable: false,  editor: { type:"text" } },
+  { dataField: 'tiptra',      text: 'Tiptra',         sort: true, headerOps: { width: '70px'                       },   editable: false,  editor: { type:"text" } },
+  { dataField: 'vinculo',     text: 'Vínculo',        sort: true, headerOps: { width: '370px', textAlign: 'center' },   editable: true,   editor: { type:"text" } },
+  { dataField: 'comentario',  text: 'Comentario',     sort: true, headerOps: { width: '370px', textAlign: 'center' },   editable: true,   editor: { type:"text" } },
+  { dataField: 'fecrec',      text: 'Fecha',          sort: true, headerOps: { width: '100px', textAlign: 'center' },   editable: false,  editor: { type:"text" } },
+  { dataField: 'anyo',        text: 'Ultimo mail',    sort: true, headerOps: { width: '100px', textAlign: 'center' },   editable: false,  editor: { type:"text" } },
+  { dataField: 'eliminar',    text: 'Eliminar',       sort: true, headerOps: { width: '100px', textAlign: 'center' },   editable: false,  editor: { type:"checkbox", value: 'Y:N'} },
 ]
 
 export default class TablaDevoluciones extends React.Component<ITablaDevolucionesProps, ITablaDevolucionesState>{

@@ -4,16 +4,16 @@ module.exports = mongoose => {
       mongoose.Schema(
         {
           _id: String,
-          pdv: String,
-          codcli: String,
-          global: String,
-          nombre: String,
-          cadena: String,
-          codest: String,
-          nomext: String,
-          nomdrv: String,
-          vta_anio_ant: String,
-          vta_anio_actual: String,
+          period: String,
+          codemp: String,
+          codpro: String,
+          docume: String,
+          implin: String,
+          fecalb: String,
+          tiptra: String,
+          vinculo: String,
+          fecrec: String,
+          anyo: String,
 
         },
         {  collection:'devoluciones_documentadas' }
