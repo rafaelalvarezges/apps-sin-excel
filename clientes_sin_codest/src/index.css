@@ -60,6 +60,10 @@ button#pageDropDown{
 .page-link:focus {
   box-shadow: none;
 }
+
+.react-bootstrap-table > table > thead > tr > th .filter-label {
+  display: block !important;
+}
 /* 
 .table{
   position:relative;
