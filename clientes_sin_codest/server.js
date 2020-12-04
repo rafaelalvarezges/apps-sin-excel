@@ -3,8 +3,8 @@ const bodyParser = require('body-parser')
 const path = require('path');
 const cors = require("cors");
 const app = express();
-
-
+var http = require('http').createServer(app);
+var io = require('socket.io')(http);
 
 // configuramos cors
 app.use(cors());
@@ -21,6 +21,17 @@ app.use(express.static(path.join(__dirname, 'build', 'index.html')));
 // rutas clientes
 require("./routes/client.routes")(app);
 
+ // Configuracion del socket
+let connectedUsersCount = 0;
+io.on('connection', socket => {
+  connectedUsersCount ++;
+  io.emit('usuarios', connectedUsersCount);
+
+  socket.on('disconnect',()=>{ 
+    connectedUsersCount --;
+    io.emit('usuarios', connectedUsersCount);
+  });
+}); 
 
 // Conexion a la base de datos
 const db = require("./models");
@@ -32,12 +43,9 @@ db.mongoose
   })
   .then(() => {
     console.log("Se ha conectado a la base de datos!");
-    app.listen(PORT, () => console.log(`Escuchando puerto ${PORT}`));
+    http.listen(PORT, () => console.log(`Escuchando puerto ${PORT}`));
   })
   .catch(err => {
     console.log("No se ha podido conectar a la base de datos", err);
     process.exit();
   });
-
-
-  
