@@ -16,4 +16,5 @@ export interface ITablaClientesState {
     // rows: IRow[];
     // columns: IColumn[];
     data: any[];
+    showMessage:boolean;
 }

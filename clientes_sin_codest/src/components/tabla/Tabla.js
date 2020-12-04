@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import cellEditFactory from 'react-bootstrap-table2-editor';
 import BootstrapTable from 'react-bootstrap-table-next';
 import filterFactory, { textFilter } from 'react-bootstrap-table2-filter';
@@ -12,8 +12,13 @@ const { SearchBar } = Search;
 
 function Tabla(props) {
 
-  const [rows] = useState(props.rows);
+  const [rows, setRows] = useState(props.rows);
   const [cols] = useState(getCols());
+
+
+  useEffect(()=>{
+    setRows(props.rows)
+  })
 
   const defaultSorted = [{
     dataField: '_id',
