@@ -41,7 +41,7 @@ function Tabla(props) {
         dataField: column.dataField,
         text: column.text,
         sort: column.sort,
-        filter: textFilter({ placeholder: column.key }),
+        filter: textFilter({ placeholder: column.text }),
         headerStyle: (col, colIndex) => { return column.headerOps },
         editable: column.editable,
         editor: column.editor
