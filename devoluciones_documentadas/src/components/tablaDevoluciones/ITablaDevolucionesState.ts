@@ -1,5 +1,3 @@
-import { Row } from "react-bootstrap";
-
 
 export interface IRow {
     id: string;
