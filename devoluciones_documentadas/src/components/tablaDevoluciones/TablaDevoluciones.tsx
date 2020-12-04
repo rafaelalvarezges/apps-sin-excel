@@ -7,27 +7,34 @@ import Tabla from '../tabla/Tabla';
 import clientService from '../../services/devolucion.service';
 import { DefaultButton } from 'office-ui-fabric-react';
 import ExportExcel from '../../services/exportFromJson';
+import { initializeIcons } from '@uifabric/icons';
+import {
+  MessageBar,
+  MessageBarType,
+} from 'office-ui-fabric-react';
+
 
 const cols = [
-  { dataField: 'period',      text: 'Periodo',        sort: true, headerOps: { width: '90px',  textAlign: 'center' },   editable: false,  editor: { type:"text" } },
-  { dataField: 'codemp',      text: 'PDV',            sort: true, headerOps: { width: '70px',  textAlign: 'center' },   editable: false,  editor: { type:"text" } },
-  { dataField: 'codpro',      text: 'Codpro',         sort: true, headerOps: { width: '70px',  textAlign: 'center' },   editable: false,  editor: { type:"text" } },
-  { dataField: 'docume',      text: 'Documento',      sort: true, headerOps: { width: '90px',  overflow:  'hidden' },   editable: false,  editor: { type:"text" } },
-  { dataField: 'implin',      text: 'Importe',        sort: true, headerOps: { width: '90px',  textAlign: 'center' },   editable: false,  editor: { type:"text" } },
-  { dataField: 'fecalb',      text: 'Fecha albarán',  sort: true, headerOps: { width: '100px', textAlign: 'center' },   editable: false,  editor: { type:"text" } },
-  { dataField: 'tiptra',      text: 'Tiptra',         sort: true, headerOps: { width: '70px'                       },   editable: false,  editor: { type:"text" } },
-  { dataField: 'vinculo',     text: 'Vínculo',        sort: true, headerOps: { width: '370px', textAlign: 'center' },   editable: true,   editor: { type:"text" } },
-  { dataField: 'comentario',  text: 'Comentario',     sort: true, headerOps: { width: '370px', textAlign: 'center' },   editable: true,   editor: { type:"text" } },
-  { dataField: 'fecrec',      text: 'Fecha',          sort: true, headerOps: { width: '100px', textAlign: 'center' },   editable: false,  editor: { type:"text" } },
-  { dataField: 'anyo',        text: 'Ultimo mail',    sort: true, headerOps: { width: '100px', textAlign: 'center' },   editable: false,  editor: { type:"text" } },
-  { dataField: 'eliminar',    text: 'Eliminar',       sort: true, headerOps: { width: '100px', textAlign: 'center' },   editable: false,  editor: { type:"checkbox", value: 'Y:N'} },
+  { dataField: 'period',      text: 'Periodo',        sort: true, align: "left",  headerOps: { width: '90px',  textAlign: 'left' },     editable: false,  editor: { type:"text" } },
+  { dataField: 'codemp',      text: 'PDV',            sort: true, align: "left",  headerOps: { width: '70px',  textAlign: 'left' },     editable: false,  editor: { type:"text" } },
+  { dataField: 'codpro',      text: 'Codpro',         sort: true, align: "left",  headerOps: { width: '70px',  textAlign: 'left' },     editable: false,  editor: { type:"text" } },
+  { dataField: 'docume',      text: 'Documento',      sort: true, align: "left",  headerOps: { width: '90px',  overflow:  'hidden' },   editable: false,  editor: { type:"text" } },
+  { dataField: 'implin',      text: 'Importe',        sort: true, align: "right", headerOps: { width: '90px',  textAlign: 'left' },     editable: false,  editor: { type:"text" } },
+  { dataField: 'fecalb',      text: 'Fecha albarán',  sort: true, align: "left",  headerOps: { width: '100px', textAlign: 'left' },     editable: false,  editor: { type:"text" } },
+  { dataField: 'tiptra',      text: 'Tiptra',         sort: true, align: "left",  headerOps: { width: '70px'                       },   editable: false,  editor: { type:"text" } },
+  { dataField: 'vinculo',     text: 'Vínculo',        sort: true, align: "left",  headerOps: { width: '370px', textAlign: 'left' },     editable: true,   editor: { type:"text" } },
+  { dataField: 'comentario',  text: 'Comentario',     sort: true, align: "left",  headerOps: { width: '370px', textAlign: 'left' },     editable: true,   editor: { type:"text" } },
+  { dataField: 'fecrec',      text: 'Fecha',          sort: true, align: "left",  headerOps: { width: '100px', textAlign: 'left' },     editable: false,  editor: { type:"text" } },
+  { dataField: 'anyo',        text: 'Ultimo mail',    sort: true, align: "left",  headerOps: { width: '100px', textAlign: 'left' },     editable: false,  editor: { type:"text" } },
+  { dataField: 'eliminar',    text: 'Eliminar',       sort: true, align: "left",  headerOps: { width: '100px', textAlign: 'left' },     editable: false,  editor: { type:"checkbox", value: 'Y:N'} },
 ]
 
 export default class TablaDevoluciones extends React.Component<ITablaDevolucionesProps, ITablaDevolucionesState>{
   constructor(props: ITablaDevolucionesProps) {
     super(props);
     this.state = {
-      data: []
+      data: [],
+      showMessage: true
     }
     this.getData()
   }
@@ -44,11 +51,26 @@ export default class TablaDevoluciones extends React.Component<ITablaDevolucione
   }
 
   public render(): React.ReactElement<ITablaDevolucionesProps> {
-
+    const close = () => this.setState({showMessage:false});
+    initializeIcons();
     return (
       <div className={styles.TablaDevoluciones}>
 
         <Container maxWidth="xl" >
+
+        {( this.props.conexiones > 1 && this.state.showMessage ) ?
+            
+            <MessageBar
+              messageBarType={MessageBarType.warning}
+              isMultiline={false}
+              onDismiss={close}
+              dismissButtonAriaLabel="Close"
+            >
+            Hay más usuarios utilizando la aplicación. Por favor, actualiza la tabla para ver los datos correctamente. 
+            
+          </MessageBar>
+        
+        : ""}
 
           <nav className="navbar navbar-light bg-light">
             <DefaultButton text="Exportar xls" onClick={() => {

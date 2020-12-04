@@ -1,12 +1,22 @@
-import logo from './logo.svg';
 import TablaDevoluciones from './components/tablaDevoluciones/TablaDevoluciones';
 import Nav from './components/nav/Nav';
-import Tabla from './components/tabla/Tabla';
 import './App.css';
-import React from 'react';
-import { BrowserRouter, Switch, Route, Link } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import { BrowserRouter, Switch, Route } from 'react-router-dom';
+import socketIOClient from "socket.io-client";
 
 function App() {
+
+  const [usrs, setResponse] = useState("");
+
+  useEffect(() => {
+    const socket = socketIOClient();
+    socket.on("usuarios", data => {
+      setResponse(data);
+    });
+  }, []);
+
+
   return (
     <BrowserRouter>
       <div>
@@ -17,7 +27,9 @@ function App() {
             <Nav
               title="Devoluciones Documentadas"
             />
-            <TablaDevoluciones />
+            <TablaDevoluciones 
+              conexiones={usrs}
+            />
           </Route>
 
         </Switch>

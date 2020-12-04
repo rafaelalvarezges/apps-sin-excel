@@ -15,5 +15,6 @@ export interface IColumn {
 export interface ITablaDevolucionesState {
     // rows: IRow[];
     // columns: IColumn[];
+    showMessage:boolean;
     data: any[];
 }

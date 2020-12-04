@@ -42,7 +42,8 @@ function Tabla(props) {
         text: column.text,
         sort: column.sort,
         filter: textFilter({ placeholder: column.text }),
-        headerStyle: (col, colIndex) => { return column.headerOps },
+        headerStyle: column.headerOps ,
+        align: column.align,
         editable: column.editable,
         editor: column.editor
       }
