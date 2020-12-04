@@ -65,7 +65,7 @@ export default class TablaClientes extends React.Component<ITablaClientesProps, 
               onDismiss={close}
               dismissButtonAriaLabel="Close"
             >
-            Hay otro usuario utilizando la aplicación. Por favor, actualiza la tabla para ver los datos correctamente. 
+            Hay más usuarios utilizando la aplicación. Por favor, actualiza la tabla para ver los datos correctamente. 
             
           </MessageBar>
         
