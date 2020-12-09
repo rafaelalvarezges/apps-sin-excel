@@ -12,8 +12,6 @@ function App() {
   useEffect(() => {
     const socket = socketIOClient();
     socket.on("usuarios", data => {
-      console.log("recibiendo socket")
-      console.log(data)
       setResponse(data);
     });
   }, []);
@@ -23,7 +21,6 @@ function App() {
   return (
     <BrowserRouter>
       <div>
-        usrs {usrs}
         <Switch>
 
           <Route path="/">
