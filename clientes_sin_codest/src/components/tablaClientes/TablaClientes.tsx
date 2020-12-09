@@ -45,7 +45,6 @@ export default class TablaClientes extends React.Component<ITablaClientesProps, 
     });
     await this.setState({ data })
     this.forceUpdate()
-    console.log(this.state.data)
     return data
 
   }
@@ -55,7 +54,7 @@ export default class TablaClientes extends React.Component<ITablaClientesProps, 
     initializeIcons();
     return (
       <div className={styles.TablaClientes}>
-
+        Usuarios conectados: {this.props.conexiones}
         <Container maxWidth="xl" >
           {( this.props.conexiones > 1 && this.state.showMessage ) ?
         
