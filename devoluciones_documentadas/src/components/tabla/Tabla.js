@@ -1,19 +1,24 @@
 import React, { useState, useEffect } from 'react';
-import cellEditFactory, { Type } from 'react-bootstrap-table2-editor';
+import cellEditFactory ,{ Type } from 'react-bootstrap-table2-editor';
 import BootstrapTable from 'react-bootstrap-table-next';
-import filterFactory, { textFilter, selectFilter } from 'react-bootstrap-table2-filter';
+import filterFactory, { textFilter } from 'react-bootstrap-table2-filter';
 import paginationFactory from 'react-bootstrap-table2-paginator';
 import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit';
 import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
 import style from '../tablaDevoluciones/TablaDevoluciones.module.scss';
 import clientService from '../../services/devolucion.service';
+import { ContactsOutlined } from '@material-ui/icons';
 
 const { SearchBar } = Search;
 
 function Tabla(props) {
 
   const [rows, setRows] = useState(props.rows);
-  const [cols, setCols] = useState(getCols());
+  const [cols] = useState(getCols());
+
+  useEffect(()=>{
+    setRows(props.rows)
+  })
 
   const defaultSorted = [{
     dataField: '_id',
@@ -45,16 +50,25 @@ function Tabla(props) {
         headerStyle: column.headerOps ,
         align: column.align,
         editable: column.editable,
-        editor: column.editor
+        // editor: column.editor
       }
-      if (column.dataField == "eliminar") {
+      if (column.dataField === "eliminar") {
 
         col = {
           ...col,
-          formatter: (cell, row) => {
+          editor: { type:Type.CHECKBOX, value: "Y:N"},
+          formatter: (cell, row, rowIndex) => {
+            // console.log(row)
+            // console.log(cell)
+            // let checked = cell=='Y' ? true : false
             return (
               <span>
-                <input type="checkbox" checked={cell} ></input>
+                <input type="checkbox" checked={cell} onChange={()=>{
+                  // checked ? rows[rowIndex].eliminar = true : rows[rowIndex].eliminar = false
+                  // setRows(rows)
+                  
+                  // saveCell(rows[rowIndex])
+                  }} ></input>
               </span>
             );
           },
@@ -81,18 +95,22 @@ function Tabla(props) {
 
     console.log(row)
 
-    let res = await clientService.update(row['_id'], row).then((res, err) => {
+    await clientService.update(row['_id'], row).then((res, err) => {
       if (err) console.log(err)
-      console.log(res)
       return res
     })
+  }
+
+  function deleteHandler(row){
+    row.eliminar = true;
+    saveCell(row)
   }
 
   return (
 
     <div className={style.TablaClientes}>
 
-      {rows.length != 0 ?
+      {rows.length !== 0 ?
         <ToolkitProvider
           keyField="_id"
           search={true}
@@ -129,7 +147,14 @@ function Tabla(props) {
                       blurToSave: true,
 
                       afterSaveCell: (oldValue, newValue, row, column) => {
-                        saveCell(row)
+                       console.log(newValue)
+                        console.log(row)
+                        if(column.dataField == "eliminar"){
+                          newValue == 'Y' ? row.eliminar = true : row.eliminar = false
+                        }
+                        
+                          saveCell(row)
+                        
                       }
                     }
                   )}

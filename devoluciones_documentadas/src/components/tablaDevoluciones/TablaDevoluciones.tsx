@@ -23,10 +23,10 @@ const cols = [
   { dataField: 'fecalb',      text: 'Fecha albarán',  sort: true, align: "left",  headerOps: { width: '100px', textAlign: 'left' },     editable: false,  editor: { type:"text" } },
   { dataField: 'tiptra',      text: 'Tiptra',         sort: true, align: "left",  headerOps: { width: '70px'                       },   editable: false,  editor: { type:"text" } },
   { dataField: 'vinculo',     text: 'Vínculo',        sort: true, align: "left",  headerOps: { width: '370px', textAlign: 'left' },     editable: true,   editor: { type:"text" } },
-  { dataField: 'comentario',  text: 'Comentario',     sort: true, align: "left",  headerOps: { width: '370px', textAlign: 'left' },     editable: true,   editor: { type:"text" } },
+  { dataField: 'coment',      text: 'Comentario',     sort: true, align: "left",  headerOps: { width: '370px', textAlign: 'left' },     editable: true,   editor: { type:"text" } },
   { dataField: 'fecrec',      text: 'Fecha',          sort: true, align: "left",  headerOps: { width: '100px', textAlign: 'left' },     editable: false,  editor: { type:"text" } },
   { dataField: 'anyo',        text: 'Ultimo mail',    sort: true, align: "left",  headerOps: { width: '100px', textAlign: 'left' },     editable: false,  editor: { type:"text" } },
-  { dataField: 'eliminar',    text: 'Eliminar',       sort: true, align: "left",  headerOps: { width: '100px', textAlign: 'left' },     editable: false,  editor: { type:"checkbox", value: 'Y:N'} },
+  { dataField: 'eliminar',    text: 'Eliminar',       sort: true, align: "left",  headerOps: { width: '100px', textAlign: 'left' },     editable: true,  editor: { type:"checkbox", value: 'true:false'} },
 ]
 
 export default class TablaDevoluciones extends React.Component<ITablaDevolucionesProps, ITablaDevolucionesState>{
@@ -78,7 +78,7 @@ export default class TablaDevoluciones extends React.Component<ITablaDevolucione
             }} />
 
             <DefaultButton text="Actualizar" onClick={() => {
-              this.forceUpdate()
+              this.getData()
             }} />
           </nav>
 

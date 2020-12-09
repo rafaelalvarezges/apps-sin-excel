@@ -9,8 +9,6 @@ class clientService {
     }
 
     update(id, data) {
-        console.log(id)
-        console.log(data)
         return http.put(`/devoluciones/${id}`, data);
     }
 

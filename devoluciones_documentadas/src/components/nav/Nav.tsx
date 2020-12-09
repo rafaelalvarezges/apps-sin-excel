@@ -1,6 +1,5 @@
 import * as React from 'react';
 import styles from './Nav.module.scss';
-import { Pivot, PivotItem } from 'office-ui-fabric-react/lib/Pivot';
 import { INavProps } from './INavProps';
 
 export default class Nav extends React.Component<INavProps>{

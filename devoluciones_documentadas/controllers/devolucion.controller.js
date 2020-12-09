@@ -45,7 +45,7 @@ exports.update = (req, res) => {
   }
 
   const id = req.params.id;
-  Devolucion.findByIdAndUpdate(id, req.body, { useFindAndModify: true })
+  Devolucion.findByIdAndUpdate(id, req.body, { useFindAndModify: false })
     .then(data => {
       if (!data) {
         res.status(404).send({

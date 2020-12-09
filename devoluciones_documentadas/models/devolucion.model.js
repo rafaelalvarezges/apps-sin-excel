@@ -14,6 +14,8 @@ module.exports = mongoose => {
           vinculo: String,
           fecrec: String,
           anyo: String,
+          coment: String,
+          eliminar: Boolean
 
         },
         {  collection:'devoluciones_documentadas' }
