@@ -2,7 +2,7 @@
 /node_modules
 /.pnp
 .pnp.js
-package.json
+# package.json
 package-lock.json
 
 # testing
