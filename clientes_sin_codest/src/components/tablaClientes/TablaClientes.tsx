@@ -49,6 +49,61 @@ export default class TablaClientes extends React.Component<ITablaClientesProps, 
 
   }
 
+  private renameKey(object: any):any{
+
+    const clonedObj = {...object};
+  
+    let targetKey = clonedObj['pdv'];
+    delete clonedObj['pdv'];
+    clonedObj['PDV'] = targetKey;
+    
+    targetKey = clonedObj['codcli'];
+    delete clonedObj['codcli'];
+    clonedObj['Cliente'] = targetKey;
+
+    targetKey = clonedObj['global'];
+    delete clonedObj['global'];
+    clonedObj['Global'] = targetKey;
+
+    targetKey = clonedObj['nombre'];
+    delete clonedObj['nombre'];
+    clonedObj['Nombre'] = targetKey;
+
+    targetKey = clonedObj['cadena'];
+    delete clonedObj['cadena'];
+    clonedObj['Cadena'] = targetKey;
+
+    targetKey = clonedObj['codest'];
+    delete clonedObj['codest'];
+    clonedObj['Cod. Est'] = targetKey;
+
+    targetKey = clonedObj['nomext'];
+    delete clonedObj['nomext'];
+    clonedObj['Com. Exterior'] = targetKey;
+
+    targetKey = clonedObj['nomdrv'];
+    delete clonedObj['nomdrv'];
+    clonedObj['DRV'] = targetKey;
+
+    targetKey = clonedObj['vta_anio_ant'];
+    delete clonedObj['vta_anio_ant'];
+    clonedObj['Venta 2019'] = targetKey;
+
+    targetKey = clonedObj['vta_anio_actual'];
+    delete clonedObj['vta_anio_actual'];
+    clonedObj['Venta 2020'] = targetKey;
+  
+    return clonedObj;
+  
+  };
+
+  private filterDocs(){
+  
+    // Cambiamos el formato de las columnas del excel
+    let docs = this.state.data.map(doc=>this.renameKey(doc))
+    return docs
+  }
+
   public render(): React.ReactElement<ITablaClientesProps> {
     const close = () => this.setState({showMessage:false});
     initializeIcons();
@@ -71,7 +126,8 @@ export default class TablaClientes extends React.Component<ITablaClientesProps, 
 
           <nav className="navbar navbar-light bg-light">
             <DefaultButton text="Exportar xls" onClick={() => {
-              ExportExcel(this.state.data)
+              let docs = this.filterDocs()
+              ExportExcel(docs)
             }} />
 
             <DefaultButton text="Actualizar" onClick={() => {
