@@ -49,6 +49,70 @@ export default class TablaDevoluciones extends React.Component<ITablaDevolucione
     return data
 
   }
+  private renameKey(object: any):any{
+
+    const clonedObj = {...object};
+  
+    let targetKey = clonedObj['anyo'];
+    delete clonedObj['anyo'];
+    clonedObj['Año'] = targetKey;
+    
+    targetKey = clonedObj['codemp'];
+    delete clonedObj['codemp'];
+    clonedObj['PDV'] = targetKey;
+
+    targetKey = clonedObj['codpro'];
+    delete clonedObj['codpro'];
+    clonedObj['Código producto'] = targetKey;
+
+    targetKey = clonedObj['coment'];
+    delete clonedObj['coment'];
+    clonedObj['Comentario'] = targetKey;
+
+    targetKey = clonedObj['docume'];
+    delete clonedObj['docume'];
+    clonedObj['Documento'] = targetKey;
+
+    targetKey = clonedObj['period'];
+    delete clonedObj['period'];
+    clonedObj['Período'] = targetKey;
+
+    targetKey = clonedObj['implin'];
+    delete clonedObj['implin'];
+    clonedObj['Importe'] = targetKey;
+
+    targetKey = clonedObj['fecalb'];
+    delete clonedObj['fecalb'];
+    clonedObj['Fecha Albarán'] = targetKey;
+
+    targetKey = clonedObj['fecrec'];
+    delete clonedObj['fecrec'];
+    clonedObj['Fecha creación'] = targetKey;
+
+    targetKey = clonedObj['tiptra'];
+    delete clonedObj['tiptra'];
+    clonedObj['Tipo'] = targetKey;
+
+    targetKey = clonedObj['vinculo'];
+    delete clonedObj['vinculo'];
+    clonedObj['Vínculo'] = targetKey;
+
+    delete clonedObj['eliminar']
+
+
+  
+    return clonedObj;
+  
+  };
+
+  private filterDocs(){
+    // Descartamos del excel los documentos previstos para eliminar
+    let data =  this.state.data.filter(doc=>doc.eliminar==false)
+
+    // Cambiamos el formato de las columnas del excel
+    let docs = data.map(doc=>this.renameKey(doc))
+    return docs
+  }
 
   public render(): React.ReactElement<ITablaDevolucionesProps> {
     const close = () => this.setState({showMessage:false});
@@ -74,7 +138,8 @@ export default class TablaDevoluciones extends React.Component<ITablaDevolucione
 
           <nav className="navbar navbar-light bg-light">
             <DefaultButton text="Exportar xls" onClick={() => {
-              ExportExcel(this.state.data)
+              let docs = this.filterDocs()
+              ExportExcel(docs)
             }} />
 
             <DefaultButton text="Actualizar" onClick={() => {
