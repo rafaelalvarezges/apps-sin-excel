@@ -58,17 +58,9 @@ function Tabla(props) {
           ...col,
           editor: { type:Type.CHECKBOX, value: "Y:N"},
           formatter: (cell, row, rowIndex) => {
-            // console.log(row)
-            // console.log(cell)
-            // let checked = cell=='Y' ? true : false
             return (
               <span>
-                <input type="checkbox" checked={cell} onChange={()=>{
-                  // checked ? rows[rowIndex].eliminar = true : rows[rowIndex].eliminar = false
-                  // setRows(rows)
-                  
-                  // saveCell(rows[rowIndex])
-                  }} ></input>
+                <input type="checkbox" checked={cell} onChange={()=>{}} ></input>
               </span>
             );
           },
@@ -99,11 +91,6 @@ function Tabla(props) {
       if (err) console.log(err)
       return res
     })
-  }
-
-  function deleteHandler(row){
-    row.eliminar = true;
-    saveCell(row)
   }
 
   return (
