@@ -20,13 +20,13 @@ const cols = [
   { dataField: 'codpro',      text: 'Codpro',         sort: true, align: "left",  headerOps: { width: '70px',  textAlign: 'left' },     editable: false,  editor: { type:"text" } },
   { dataField: 'docume',      text: 'Documento',      sort: true, align: "left",  headerOps: { width: '90px',  overflow:  'hidden' },   editable: false,  editor: { type:"text" } },
   { dataField: 'implin',      text: 'Importe',        sort: true, align: "right", headerOps: { width: '90px',  textAlign: 'left' },     editable: false,  editor: { type:"text" } },
-  { dataField: 'fecalb',      text: 'Fecha albarán',  sort: true, align: "left",  headerOps: { width: '100px', textAlign: 'left' },     editable: false,  editor: { type:"text" } },
-  { dataField: 'tiptra',      text: 'Tiptra',         sort: true, align: "left",  headerOps: { width: '70px'                       },   editable: false,  editor: { type:"text" } },
+  { dataField: 'fecalb',      text: 'Fecha albarán',  sort: true, align: "center",  headerOps: { width: '140px', textAlign: 'left' },     editable: false,  editor: { type:"text" } },
+  { dataField: 'tiptra',      text: 'Tiptra',         sort: true, align: "center",  headerOps: { width: '70px'                       },   editable: false,  editor: { type:"text" } },
   { dataField: 'vinculo',     text: 'Vínculo',        sort: true, align: "left",  headerOps: { width: '370px', textAlign: 'left' },     editable: true,   editor: { type:"text" } },
   { dataField: 'coment',      text: 'Comentario',     sort: true, align: "left",  headerOps: { width: '370px', textAlign: 'left' },     editable: true,   editor: { type:"text" } },
-  { dataField: 'fecrec',      text: 'Fecha',          sort: true, align: "left",  headerOps: { width: '100px', textAlign: 'left' },     editable: false,  editor: { type:"text" } },
-  { dataField: 'anyo',        text: 'Ultimo mail',    sort: true, align: "left",  headerOps: { width: '100px', textAlign: 'left' },     editable: false,  editor: { type:"text" } },
-  { dataField: 'eliminar',    text: 'Eliminar',       sort: true, align: "left",  headerOps: { width: '100px', textAlign: 'left' },     editable: true,  editor: { type:"checkbox", value: 'true:false'} },
+  { dataField: 'fecrec',      text: 'Fecha',          sort: true, align: "center",  headerOps: { width: '100px', textAlign: 'left' },     editable: false,  editor: { type:"text" } },
+  { dataField: 'anyo',        text: 'Ultimo mail',    sort: true, align: "center",  headerOps: { width: '140px', textAlign: 'left' },     editable: false,  editor: { type:"text" } },
+  { dataField: 'eliminar',    text: 'Eliminar',       sort: true, align: "center",  headerOps: { width: '100px', textAlign: 'left' },     editable: true,   editor: { type:"checkbox", value: 'true:false'} },
 ]
 
 export default class TablaDevoluciones extends React.Component<ITablaDevolucionesProps, ITablaDevolucionesState>{

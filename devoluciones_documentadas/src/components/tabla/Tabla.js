@@ -7,7 +7,6 @@ import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit';
 import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
 import style from '../tablaDevoluciones/TablaDevoluciones.module.scss';
 import clientService from '../../services/devolucion.service';
-import { ContactsOutlined } from '@material-ui/icons';
 
 const { SearchBar } = Search;
 
@@ -56,6 +55,7 @@ function Tabla(props) {
 
         col = {
           ...col,
+          filter:false,
           editor: { type:Type.CHECKBOX, value: "Y:N"},
           formatter: (cell, row, rowIndex) => {
             return (
@@ -64,14 +64,14 @@ function Tabla(props) {
               </span>
             );
           },
-          headerFormatter: (column, colIndex) => {
-            return (
-              <div>
-                <label>{column.text}</label>
-                <div><input type="checkbox" name="eliminar" value="" /></div>
-              </div>
-            );
-          }
+          // headerFormatter: (column, colIndex) => {
+          //   return (
+          //     <div>
+          //       <label>{column.text}</label>
+          //       <div><input type="checkbox" name="eliminar" value="" /></div>
+          //     </div>
+          //   );
+          // }
 
         }
 
