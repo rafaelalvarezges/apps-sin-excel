@@ -16,7 +16,7 @@ import {
 import { CommandBar, ICommandBarItemProps } from 'office-ui-fabric-react/lib/CommandBar';
 import { IButtonProps } from 'office-ui-fabric-react/lib/Button';
 import ExcelPage from '../tabla/excelPage';
-import { Button, Upload } from "antd"
+import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
 
 const cols = [
   { dataField: 'pdv',             text: 'PDV',           sort: true, align: "left",   editable: false, headerOps: { width: '90px' } },
@@ -41,17 +41,20 @@ export default class TablaClientes extends React.Component<ITablaClientesProps, 
       data: [], 
       filteredData: [],
       showMessage: true, 
-      file: null
+      file: null, 
+      loading:true
     }
     this.getData()
   }
 
   private async getData() {
+    this.setState({loading:true})
     let data = await clientService.getAll().then(async (res) => {
       return res.data
     });
     await this.setState({ data: data, filteredData:data })
     this.forceUpdate()
+    this.setState({loading:false})
     return data
 
   }
@@ -152,12 +155,13 @@ export default class TablaClientes extends React.Component<ITablaClientesProps, 
             }} /> */}
           {/* </nav> */}
           <div>
-          <CommandBar
+            <CommandBar
               items={this._items}
               overflowButtonProps={overflowProps}
               ariaLabel="Use left and right arrow keys to navigate between commands"
             />
           </div>
+          {this.state.loading ? <Spinner label="Cargando datos"></Spinner>: ""}
 
           {this.state.data.length !== 0 ?
 
@@ -168,6 +172,7 @@ export default class TablaClientes extends React.Component<ITablaClientesProps, 
             />
 
             : <></>}
+            
         <ExcelPage/>
         </Container>
         
