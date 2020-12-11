@@ -14,16 +14,12 @@ function Tabla(props) {
 
   const [rows, setRows] = useState(props.rows);
   const [cols] = useState(getCols());
-  const [filteredRows, setFilteredRows] = useState();
 
   useEffect(()=>{
     setRows(props.rows)
   })
 
-  const defaultSorted = [{
-    dataField: '_id',
-    order: 'asc'
-  }];
+  const defaultSorted = [{ dataField: '_id', order: 'asc' }];
 
   const customTotal = (from, to, size) => (
     <span className="react-bootstrap-table-pagination-total">
@@ -35,7 +31,6 @@ function Tabla(props) {
     showTotal: true,
     paginationTotalRenderer: customTotal,
   }
-
 
   function getCols() {
 
@@ -69,8 +64,6 @@ function Tabla(props) {
     })
   }
   const afterSearch = (newResult) => {
-    console.log(newResult);
-    setFilteredRows(newResult);
     props.updateFilteredData(newResult)
   };
 
@@ -127,7 +120,6 @@ function Tabla(props) {
         </ToolkitProvider>
         : <></>}
   
-        
     </div>
   );
 
