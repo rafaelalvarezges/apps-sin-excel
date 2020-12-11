@@ -117,26 +117,7 @@ export default class TablaClientes extends React.Component<ITablaClientesProps, 
     },
   ];
   
-  private _farItems: ICommandBarItemProps[] = [
-    {
-      key: 'tile',
-      text: 'Grid view',
-      // This needs an ariaLabel since it's icon-only
-      ariaLabel: 'Grid view',
-      iconOnly: true,
-      iconProps: { iconName: 'Tiles' },
-      onClick: () => console.log('Tiles'),
-    },
-    {
-      key: 'info',
-      text: 'Info',
-      // This needs an ariaLabel since it's icon-only
-      ariaLabel: 'Info',
-      iconOnly: true,
-      iconProps: { iconName: 'Info' },
-      onClick: () => console.log('Info'),
-    },
-  ];
+  
   
 
   public render(): React.ReactElement<ITablaClientesProps> {
@@ -174,7 +155,6 @@ export default class TablaClientes extends React.Component<ITablaClientesProps, 
           <CommandBar
               items={this._items}
               overflowButtonProps={overflowProps}
-              farItems={this._farItems}
               ariaLabel="Use left and right arrow keys to navigate between commands"
             />
           </div>
