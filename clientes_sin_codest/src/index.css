@@ -64,6 +64,9 @@ button#pageDropDown{
 .react-bootstrap-table > table > thead > tr > th .filter-label {
   display: block !important;
 }
+button:focus {
+  outline: 1px dotted;
+}
 /* 
 .table{
   position:relative;

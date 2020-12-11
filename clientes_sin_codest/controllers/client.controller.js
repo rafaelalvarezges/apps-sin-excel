@@ -42,7 +42,9 @@ exports.update = (req, res) => {
       message: "Los datos a actualizar no pueden estar vacios!"
     });
   }
-
+  console.log(req.body)
+  console.log(req.params.id)
+  console.log(req.params)
   const id = req.params.id;
   Client.findByIdAndUpdate(id, req.body, { useFindAndModify: true })
     .then(data => {

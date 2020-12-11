@@ -14,7 +14,7 @@ function Tabla(props) {
 
   const [rows, setRows] = useState(props.rows);
   const [cols] = useState(getCols());
-
+  const [filteredRows, setFilteredRows] = useState();
 
   useEffect(()=>{
     setRows(props.rows)
@@ -68,6 +68,11 @@ function Tabla(props) {
       return res
     })
   }
+  const afterSearch = (newResult) => {
+    console.log(newResult);
+    setFilteredRows(newResult);
+    props.updateFilteredData(newResult)
+  };
 
   return (
 
@@ -76,7 +81,7 @@ function Tabla(props) {
       {rows.length !== 0 ?
         <ToolkitProvider
           keyField="_id"
-          search={true}
+          search={{afterSearch}}
           data={rows}
           columns={cols}
         >
@@ -90,7 +95,7 @@ function Tabla(props) {
                   />
 
                 </nav>
-
+                
                 <BootstrapTable
                   {...props.baseProps}
                   keyField='_id'
@@ -121,7 +126,8 @@ function Tabla(props) {
             )}
         </ToolkitProvider>
         : <></>}
-
+  
+        
     </div>
   );
 

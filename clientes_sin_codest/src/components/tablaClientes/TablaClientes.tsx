@@ -13,7 +13,10 @@ import {
   MessageBar,
   MessageBarType,
 } from 'office-ui-fabric-react';
-
+import { CommandBar, ICommandBarItemProps } from 'office-ui-fabric-react/lib/CommandBar';
+import { IButtonProps } from 'office-ui-fabric-react/lib/Button';
+import ExcelPage from '../tabla/excelPage';
+import { Button, Upload } from "antd"
 
 const cols = [
   { dataField: 'pdv',             text: 'PDV',           sort: true, align: "left",   editable: false, headerOps: { width: '90px' } },
@@ -27,6 +30,8 @@ const cols = [
   { dataField: 'vta_anio_ant',    text: 'Venta 2019',    sort: true, align: "right",  editable: false, headerOps: { width: '130px' } },
   { dataField: 'vta_anio_actual', text: 'Venta 2020',    sort: true, align: "right",  editable: false, headerOps: { width: '130px' } },
 ]
+const overflowProps: IButtonProps = { ariaLabel: 'More commands' };
+
 
 
 export default class TablaClientes extends React.Component<ITablaClientesProps, ITablaClientesState>{
@@ -34,7 +39,9 @@ export default class TablaClientes extends React.Component<ITablaClientesProps, 
     super(props);
     this.state = {
       data: [], 
-      showMessage: true
+      filteredData: [],
+      showMessage: true, 
+      file: null
     }
     this.getData()
   }
@@ -43,55 +50,25 @@ export default class TablaClientes extends React.Component<ITablaClientesProps, 
     let data = await clientService.getAll().then(async (res) => {
       return res.data
     });
-    await this.setState({ data })
+    await this.setState({ data: data, filteredData:data })
     this.forceUpdate()
     return data
 
   }
 
+  updateFilteredData = (filteredData:any) => {
+    this.setState({ filteredData });
+  }
+
   private renameKey(object: any):any{
 
     const clonedObj = {...object};
-  
-    let targetKey = clonedObj['pdv'];
-    delete clonedObj['pdv'];
-    clonedObj['PDV'] = targetKey;
-    
-    targetKey = clonedObj['codcli'];
-    delete clonedObj['codcli'];
-    clonedObj['Cliente'] = targetKey;
 
-    targetKey = clonedObj['global'];
-    delete clonedObj['global'];
-    clonedObj['Global'] = targetKey;
-
-    targetKey = clonedObj['nombre'];
-    delete clonedObj['nombre'];
-    clonedObj['Nombre'] = targetKey;
-
-    targetKey = clonedObj['cadena'];
-    delete clonedObj['cadena'];
-    clonedObj['Cadena'] = targetKey;
-
-    targetKey = clonedObj['codest'];
-    delete clonedObj['codest'];
-    clonedObj['Cod. Est'] = targetKey;
-
-    targetKey = clonedObj['nomext'];
-    delete clonedObj['nomext'];
-    clonedObj['Com. Exterior'] = targetKey;
-
-    targetKey = clonedObj['nomdrv'];
-    delete clonedObj['nomdrv'];
-    clonedObj['DRV'] = targetKey;
-
-    targetKey = clonedObj['vta_anio_ant'];
-    delete clonedObj['vta_anio_ant'];
-    clonedObj['Venta 2019'] = targetKey;
-
-    targetKey = clonedObj['vta_anio_actual'];
-    delete clonedObj['vta_anio_actual'];
-    clonedObj['Venta 2020'] = targetKey;
+    cols.map(col=>{
+      let targetKey = clonedObj[col.dataField];
+      delete clonedObj[col.dataField];
+      clonedObj[col.text] = targetKey;
+    })
   
     return clonedObj;
   
@@ -100,9 +77,67 @@ export default class TablaClientes extends React.Component<ITablaClientesProps, 
   private filterDocs(){
   
     // Cambiamos el formato de las columnas del excel
-    let docs = this.state.data.map(doc=>this.renameKey(doc))
+    let docs = this.state.filteredData.map(doc=>this.renameKey(doc))
     return docs
   }
+
+
+  private _items: ICommandBarItemProps[] = [
+ 
+    {
+      key: 'upload',
+      text: 'Importar excel',
+      iconProps: { iconName: 'Upload' },
+      onClick: () => {
+         $('input[type=file]').trigger('click') ;
+      }
+    },
+    {
+      key: 'share',
+      text: 'Cargar datos',
+      iconProps: { iconName: 'Share' },
+      onClick: () => {
+
+      },
+    },
+    {
+      key: 'download',
+      text: 'Descargar excel',
+      iconProps: { iconName: 'Download' },
+      onClick: () => {
+        let docs = this.filterDocs()
+        ExportExcel(docs)
+      },
+    },
+    {
+      key: 'update',
+      text: 'Actualizar tabla',
+      iconProps: { iconName: 'Refresh' },
+      onClick: () => this.getData(),
+    },
+  ];
+  
+  private _farItems: ICommandBarItemProps[] = [
+    {
+      key: 'tile',
+      text: 'Grid view',
+      // This needs an ariaLabel since it's icon-only
+      ariaLabel: 'Grid view',
+      iconOnly: true,
+      iconProps: { iconName: 'Tiles' },
+      onClick: () => console.log('Tiles'),
+    },
+    {
+      key: 'info',
+      text: 'Info',
+      // This needs an ariaLabel since it's icon-only
+      ariaLabel: 'Info',
+      iconOnly: true,
+      iconProps: { iconName: 'Info' },
+      onClick: () => console.log('Info'),
+    },
+  ];
+  
 
   public render(): React.ReactElement<ITablaClientesProps> {
     const close = () => this.setState({showMessage:false});
@@ -124,26 +159,38 @@ export default class TablaClientes extends React.Component<ITablaClientesProps, 
         
          : ""}
 
-          <nav className="navbar navbar-light bg-light">
-            <DefaultButton text="Exportar xls" onClick={() => {
+          {/* <nav className="navbar navbar-light bg-light"> */}
+         
+            {/* <DefaultButton text="Exportar xls" onClick={() => {
               let docs = this.filterDocs()
               ExportExcel(docs)
             }} />
 
             <DefaultButton text="Actualizar" onClick={() => {
               this.getData()
-            }} />
-          </nav>
+            }} /> */}
+          {/* </nav> */}
+          <div>
+          <CommandBar
+              items={this._items}
+              overflowButtonProps={overflowProps}
+              farItems={this._farItems}
+              ariaLabel="Use left and right arrow keys to navigate between commands"
+            />
+          </div>
 
           {this.state.data.length !== 0 ?
 
             <Tabla
               rows={this.state.data}
               cols={cols}
+              updateFilteredData={this.updateFilteredData}
             />
 
             : <></>}
+        <ExcelPage/>
         </Container>
+        
 
       </div>
     );

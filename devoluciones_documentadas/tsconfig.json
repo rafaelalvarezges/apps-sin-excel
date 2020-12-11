@@ -21,6 +21,6 @@
     "jsx": "react"
   },
   "include": [
-    "src", "../database.js"
+    "src", "../database.js", "../clientes_sin_codest/src/components/tabla/excelPage.js"
   ]
 }
