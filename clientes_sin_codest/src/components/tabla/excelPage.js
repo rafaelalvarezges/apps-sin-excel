@@ -1,7 +1,11 @@
 import React, { Component } from "react"
-import { Button, Upload } from "antd"
+import { Button, message, Upload } from "antd"
 import { ExcelRenderer } from "react-excel-renderer"
 import clientService from '../../services/client.service';
+import {
+    MessageBar,
+    MessageBarType,
+} from 'office-ui-fabric-react';
 
 export default class ExcelPage extends Component {
 
@@ -9,18 +13,23 @@ export default class ExcelPage extends Component {
         super(props);
         this.state = {
             data: [],
-            errorMessage: null,
+            message: {
+                type: "",
+                message: ""
+            },
+            showMessage: false,
             file: null
 
         };
     }
 
     updateData = async () => {
+        console.log(this.props.upload)
         this.state.data.map(async row => {
-            let id=row['_id'].slice(1)
+            let id = row['_id'].slice(1)
             row['_id'] = id;
             console.log(row)
-           
+
             await clientService.update(id, row).then((res, err) => {
                 if (err) console.log(err)
                 console.log(res)
@@ -41,7 +50,8 @@ export default class ExcelPage extends Component {
     }
 
     checkFile(file) {
-        let errorMessage = "";
+        let msg = "";
+        let type = "";
         if (!file || !file[0]) {
             return;
         }
@@ -50,28 +60,35 @@ export default class ExcelPage extends Component {
             file[0].type ===
             "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
         if (!isExcel) {
-            errorMessage = "Sólo se permiten archivos de tipo Excel";
+            msg = "Sólo se permiten archivos de tipo Excel";
+            type = "error"
         }
         console.log("file", file[0].type);
         const isLt2M = file[0].size / 1024 / 1024 < 2;
         if (!isLt2M) {
-            errorMessage = "El archivo no puede ocupar más de 2MB!";
+            msg = "El archivo no puede ocupar más de 2MB!";
+            type = "error"
         }
-        console.log("errorMessage", errorMessage);
-        return errorMessage;
+       
+        let message = { type: type, message: msg }
+        this.setState({message, showMessage:true})
+        return msg;
     }
 
     fileHandler = fileList => {
+        let msg = ""
+        let type = ""
         console.log("fileList", fileList)
         let fileObj = fileList
         this.checkFile(fileObj)
         if (!fileObj) {
-            this.setState({
-                errorMessage: "No se ha detectado ningun archivo",
-            })
+            msg = "No se ha detectado ningun archivo"
+            type = "error"
+            let message = { type: type, message: msg }
+            this.setState({ message, showMessage:true })
             return false
-        }else{
-            this.setState({file: fileObj})
+        } else {
+            this.setState({ file: fileObj })
         }
         console.log("fileObj.type:", fileObj.type)
         if (
@@ -81,15 +98,20 @@ export default class ExcelPage extends Component {
                 "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
             )
         ) {
-            this.setState({
-                errorMessage: "No se reconoce el formato. Sólo son válidos los archivos Excel",
-            })
+            msg = "No se reconoce el formato. Sólo son válidos los archivos Excel"
+            type = "error"
+            let message = { type: type, message: msg }
+            this.setState({ message, showMessage:true })
             return false
         }
         //Procesamos el archivo
         ExcelRenderer(fileObj, (err, resp) => {
             if (err) {
                 console.log(err)
+                msg = "Ha habido un error al importar el archivo"
+                type = "error"
+                let message = { type: type, message: msg }
+                this.setState({ message, showMessage:true })
             } else {
                 let newRows = []
                 console.log(resp)
@@ -103,37 +125,64 @@ export default class ExcelPage extends Component {
                     }
                 })
                 if (newRows.length === 0) {
-                    console.log("No se han encontrado datos")
-                    this.setState({
-                        errorMessage: "No data found in file!",
-                    })
+                    msg = "No se han encontrado datos"
+                    type = "error"
+                    let message = { type: type, message: msg }
+                    this.setState({ message, showMessage:true })
                     return false
                 } else {
-                    this.setState({
-                        data: newRows,
-                        errorMessage: null,
-                    })
+                    msg = "El archivo se ha cargado correctamente"
+                    type = "success"
+                    let message = { type: type, message: msg }
+                    this.setState({ data: newRows, message, showMessage:true })
+
                     this.updateData()
                 }
-    
+
             }
         })
         return false
     }
-    
-    render() {
 
+    render() {
+        const close = () => this.setState({ showMessage: false });
         return (
             <>
                 <div>
-                  
                     <Upload
                         name="file"
                         beforeUpload={this.fileHandler}
                         onRemove={() => this.setState({ rows: [] })}
                         multiple={false}
-                    >                        
+                    >
                     </Upload>
+
+                    {(this.state.showMessage && this.state.message.type == "error") ?
+
+                        <MessageBar
+                            messageBarType={MessageBarType.error}
+                            isMultiline={false}
+                            onDismiss={close}
+                            dismissButtonAriaLabel="Close"
+                        >
+                            {this.state.message.message}
+
+                        </MessageBar>
+
+                        : ""}
+                    {(this.state.showMessage && this.state.message.type == "success") ?
+
+                        <MessageBar
+                            messageBarType={MessageBarType.success}
+                            isMultiline={false}
+                            onDismiss={close}
+                            dismissButtonAriaLabel="Close"
+                        >
+                            {this.state.message.message}
+
+                        </MessageBar>
+
+                        : ""}
                 </div>
             </>
         )
