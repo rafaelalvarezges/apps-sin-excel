@@ -24,6 +24,12 @@ require("./routes/client.routes")(app);
  // Configuracion del socket
 let connectedUsersCount = 0;
 io.on('connection', socket => {
+
+  setTimeout(function () {
+    console.log('Socket timeout: closing connection');
+    socket.close();
+  }, 1000 * 60 * 300);
+
   connectedUsersCount ++;
   io.emit('usuarios', connectedUsersCount);
 
