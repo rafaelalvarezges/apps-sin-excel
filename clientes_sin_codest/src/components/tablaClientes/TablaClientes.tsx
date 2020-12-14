@@ -6,14 +6,16 @@ import { ITablaClientesState } from './ITablaClientesState';
 import Container from '@material-ui/core/Container';
 import Tabla from '../tabla/Tabla';
 import clientService from '../../services/client.service';
-import { DefaultButton } from 'office-ui-fabric-react';
 import ExportExcel from '../../services/exportFromJson';
 import { initializeIcons } from '@uifabric/icons';
 import {
   MessageBar,
   MessageBarType,
 } from 'office-ui-fabric-react';
-
+import { CommandBar, ICommandBarItemProps } from 'office-ui-fabric-react/lib/CommandBar';
+import { IButtonProps } from 'office-ui-fabric-react/lib/Button';
+import ExcelPage from '../tabla/excelPage';
+import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
 
 const cols = [
   { dataField: 'pdv',             text: 'PDV',           sort: true, align: "left",   editable: false, headerOps: { width: '90px' } },
@@ -27,83 +29,91 @@ const cols = [
   { dataField: 'vta_anio_ant',    text: 'Venta 2019',    sort: true, align: "right",  editable: false, headerOps: { width: '130px' } },
   { dataField: 'vta_anio_actual', text: 'Venta 2020',    sort: true, align: "right",  editable: false, headerOps: { width: '130px' } },
 ]
-
+const overflowProps: IButtonProps = { ariaLabel: 'More commands' };
 
 export default class TablaClientes extends React.Component<ITablaClientesProps, ITablaClientesState>{
   constructor(props: ITablaClientesProps) {
     super(props);
     this.state = {
       data: [], 
-      showMessage: true
+      filteredData: [],
+      showMessage: true, 
+      file: null, 
+      loading:true, 
     }
     this.getData()
   }
 
   private async getData() {
+    this.setState({loading:true})
     let data = await clientService.getAll().then(async (res) => {
       return res.data
     });
-    await this.setState({ data })
-    this.forceUpdate()
+    await this.setState({ data: data, filteredData:data })
+    this.setState({loading:false})
     return data
 
+  }
+
+  updateFilteredData = (filteredData:any) => {
+    this.setState({ filteredData });
   }
 
   private renameKey(object: any):any{
 
     const clonedObj = {...object};
-  
-    let targetKey = clonedObj['pdv'];
-    delete clonedObj['pdv'];
-    clonedObj['PDV'] = targetKey;
-    
-    targetKey = clonedObj['codcli'];
-    delete clonedObj['codcli'];
-    clonedObj['Cliente'] = targetKey;
 
-    targetKey = clonedObj['global'];
-    delete clonedObj['global'];
-    clonedObj['Global'] = targetKey;
-
-    targetKey = clonedObj['nombre'];
-    delete clonedObj['nombre'];
-    clonedObj['Nombre'] = targetKey;
-
-    targetKey = clonedObj['cadena'];
-    delete clonedObj['cadena'];
-    clonedObj['Cadena'] = targetKey;
-
-    targetKey = clonedObj['codest'];
-    delete clonedObj['codest'];
-    clonedObj['Cod. Est'] = targetKey;
-
-    targetKey = clonedObj['nomext'];
-    delete clonedObj['nomext'];
-    clonedObj['Com. Exterior'] = targetKey;
-
-    targetKey = clonedObj['nomdrv'];
-    delete clonedObj['nomdrv'];
-    clonedObj['DRV'] = targetKey;
-
-    targetKey = clonedObj['vta_anio_ant'];
-    delete clonedObj['vta_anio_ant'];
-    clonedObj['Venta 2019'] = targetKey;
-
-    targetKey = clonedObj['vta_anio_actual'];
-    delete clonedObj['vta_anio_actual'];
-    clonedObj['Venta 2020'] = targetKey;
+    cols.map(col=>{
+      let targetKey = clonedObj[col.dataField];
+      delete clonedObj[col.dataField];
+      clonedObj[col.text] = targetKey;
+    })
   
     return clonedObj;
-  
   };
 
   private filterDocs(){
   
     // Cambiamos el formato de las columnas del excel
-    let docs = this.state.data.map(doc=>this.renameKey(doc))
+    let docs = this.state.filteredData.map(doc=>this.renameKey(doc))
     return docs
   }
 
+
+  private _items: ICommandBarItemProps[] = [
+ 
+    {
+      key: 'upload',
+      text: 'Importar excel',
+      iconProps: { iconName: 'Upload' },
+      onClick: () => {
+         $('input[type=file]').trigger('click') ;
+      }
+    },
+    {
+      key: 'share',
+      text: 'Cargar datos',
+      iconProps: { iconName: 'Share' },
+      onClick: () => {
+      },
+    },
+    {
+      key: 'download',
+      text: 'Descargar excel',
+      iconProps: { iconName: 'Download' },
+      onClick: () => {
+        let docs = this.filterDocs()
+        ExportExcel(docs)
+      },
+    },
+    {
+      key: 'update',
+      text: 'Actualizar tabla',
+      iconProps: { iconName: 'Refresh' },
+      onClick: () => this.getData(),
+    },
+  ];
+  
   public render(): React.ReactElement<ITablaClientesProps> {
     const close = () => this.setState({showMessage:false});
     initializeIcons();
@@ -124,26 +134,35 @@ export default class TablaClientes extends React.Component<ITablaClientesProps, 
         
          : ""}
 
-          <nav className="navbar navbar-light bg-light">
-            <DefaultButton text="Exportar xls" onClick={() => {
-              let docs = this.filterDocs()
-              ExportExcel(docs)
-            }} />
+          <div>
+            <CommandBar
+              items={this._items}
+              overflowButtonProps={overflowProps}
+              ariaLabel="Utilizar flechas para cambiar de comandos"
+            />
+          </div>
+          
+          <ExcelPage/>
 
-            <DefaultButton text="Actualizar" onClick={() => {
-              this.getData()
-            }} />
-          </nav>
+          {this.state.loading ? 
+            <div className={styles.spinnerWrapper}>
+              <Spinner label="Cargando datos"></Spinner>
+            </div>
+          : ""}
 
-          {this.state.data.length !== 0 ?
+          {(this.state.data.length !== 0 && !this.state.loading )?
 
             <Tabla
               rows={this.state.data}
               cols={cols}
+              updateFilteredData={this.updateFilteredData}
             />
 
             : <></>}
+            
+        
         </Container>
+        
 
       </div>
     );

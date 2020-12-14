@@ -15,4 +15,7 @@ export interface ITablaClientesState {
     // columns: IColumn[];
     data: any[];
     showMessage:boolean;
+    file: any;
+    filteredData:any[];
+    loading:boolean;
 }
