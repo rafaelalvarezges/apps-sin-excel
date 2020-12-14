@@ -17,7 +17,7 @@ function Tabla(props) {
 
   useEffect(()=>{
     setRows(props.rows)
-  })
+  }, []);
 
   const defaultSorted = [{ dataField: '_id', order: 'asc' }];
 
@@ -119,6 +119,7 @@ function Tabla(props) {
             )}
         </ToolkitProvider>
         : <></>}
+        
   
     </div>
   );
