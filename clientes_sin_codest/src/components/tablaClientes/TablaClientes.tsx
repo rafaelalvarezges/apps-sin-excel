@@ -6,7 +6,6 @@ import { ITablaClientesState } from './ITablaClientesState';
 import Container from '@material-ui/core/Container';
 import Tabla from '../tabla/Tabla';
 import clientService from '../../services/client.service';
-import { DefaultButton } from 'office-ui-fabric-react';
 import ExportExcel from '../../services/exportFromJson';
 import { initializeIcons } from '@uifabric/icons';
 import {
@@ -32,8 +31,6 @@ const cols = [
 ]
 const overflowProps: IButtonProps = { ariaLabel: 'More commands' };
 
-
-
 export default class TablaClientes extends React.Component<ITablaClientesProps, ITablaClientesState>{
   constructor(props: ITablaClientesProps) {
     super(props);
@@ -42,7 +39,7 @@ export default class TablaClientes extends React.Component<ITablaClientesProps, 
       filteredData: [],
       showMessage: true, 
       file: null, 
-      loading:true
+      loading:true, 
     }
     this.getData()
   }
@@ -53,7 +50,6 @@ export default class TablaClientes extends React.Component<ITablaClientesProps, 
       return res.data
     });
     await this.setState({ data: data, filteredData:data })
-    this.forceUpdate()
     this.setState({loading:false})
     return data
 
@@ -74,7 +70,6 @@ export default class TablaClientes extends React.Component<ITablaClientesProps, 
     })
   
     return clonedObj;
-  
   };
 
   private filterDocs(){
@@ -100,7 +95,6 @@ export default class TablaClientes extends React.Component<ITablaClientesProps, 
       text: 'Cargar datos',
       iconProps: { iconName: 'Share' },
       onClick: () => {
-
       },
     },
     {
@@ -120,9 +114,6 @@ export default class TablaClientes extends React.Component<ITablaClientesProps, 
     },
   ];
   
-  
-  
-
   public render(): React.ReactElement<ITablaClientesProps> {
     const close = () => this.setState({showMessage:false});
     initializeIcons();
@@ -143,27 +134,23 @@ export default class TablaClientes extends React.Component<ITablaClientesProps, 
         
          : ""}
 
-          {/* <nav className="navbar navbar-light bg-light"> */}
-         
-            {/* <DefaultButton text="Exportar xls" onClick={() => {
-              let docs = this.filterDocs()
-              ExportExcel(docs)
-            }} />
-
-            <DefaultButton text="Actualizar" onClick={() => {
-              this.getData()
-            }} /> */}
-          {/* </nav> */}
           <div>
             <CommandBar
               items={this._items}
               overflowButtonProps={overflowProps}
-              ariaLabel="Use left and right arrow keys to navigate between commands"
+              ariaLabel="Utilizar flechas para cambiar de comandos"
             />
           </div>
-          {this.state.loading ? <Spinner label="Cargando datos"></Spinner>: ""}
+          
+          <ExcelPage/>
 
-          {this.state.data.length !== 0 ?
+          {this.state.loading ? 
+            <div className={styles.spinnerWrapper}>
+              <Spinner label="Cargando datos"></Spinner>
+            </div>
+          : ""}
+
+          {(this.state.data.length !== 0 && !this.state.loading )?
 
             <Tabla
               rows={this.state.data}
@@ -173,7 +160,7 @@ export default class TablaClientes extends React.Component<ITablaClientesProps, 
 
             : <></>}
             
-        <ExcelPage/>
+        
         </Container>
         
 
