@@ -50,9 +50,11 @@ export default class TablaClientes extends React.Component<ITablaClientesProps, 
   private async getData() {
     this.setState({loading:true})
     let data = await clientService.getAll().then(async (res) => {
-      return res.data
+      let result = res.data.filter((d: any) => (d.codest == " " || d.codest.length == 0 || d.codest == undefined || !d.codest))
+      return result
     });
     await this.setState({ data: data, filteredData:data })
+    
     this.setState({loading:false})
     return data
 
