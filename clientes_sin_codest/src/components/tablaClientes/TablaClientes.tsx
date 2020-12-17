@@ -1,12 +1,9 @@
-
 import * as React from 'react';
 import styles from './TablaClientes.module.scss';
 import { ITablaClientesProps } from './ITablaClientesProps';
 import { ITablaClientesState } from './ITablaClientesState';
 import Container from '@material-ui/core/Container';
 import Tabla from '../tabla/Tabla';
-import clientService from '../../services/client.service';
-import ExportExcel from '../../services/exportFromJson';
 import { initializeIcons } from '@uifabric/icons';
 import {
   MessageBar,
@@ -14,8 +11,11 @@ import {
 } from 'office-ui-fabric-react';
 import { CommandBar, ICommandBarItemProps } from 'office-ui-fabric-react/lib/CommandBar';
 import { IButtonProps } from 'office-ui-fabric-react/lib/Button';
-import ExcelPage from '../tabla/excelPage';
 import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
+// Servicios
+import Import from '../../services/import';
+import Export from '../../services/export';
+import clientService from '../../services/client.service';
 
 const cols = [
   { dataField: 'pdv',             text: 'PDV',           sort: true, align: "left",   editable: false, headerOps: { width: '90px' } },
@@ -30,6 +30,8 @@ const cols = [
   { dataField: 'vta_anio_actual', text: 'Venta 2020',    sort: true, align: "right",  editable: false, headerOps: { width: '130px' } },
 ]
 const overflowProps: IButtonProps = { ariaLabel: 'More commands' };
+const exportProps: any = { fileName: "clientes", exportType: "csv" }
+
 
 export default class TablaClientes extends React.Component<ITablaClientesProps, ITablaClientesState>{
   constructor(props: ITablaClientesProps) {
@@ -40,6 +42,7 @@ export default class TablaClientes extends React.Component<ITablaClientesProps, 
       showMessage: true, 
       file: null, 
       loading:true, 
+      download: false
     }
     this.getData()
   }
@@ -78,7 +81,10 @@ export default class TablaClientes extends React.Component<ITablaClientesProps, 
     let docs = this.state.filteredData.map(doc=>this.renameKey(doc))
     return docs
   }
-
+  private setDownload(download: boolean){
+    this.setState({download})
+    console.log(this.state.download)
+  }
 
   private _items: ICommandBarItemProps[] = [
  
@@ -91,19 +97,13 @@ export default class TablaClientes extends React.Component<ITablaClientesProps, 
       }
     },
     {
-      key: 'share',
-      text: 'Cargar datos',
-      iconProps: { iconName: 'Share' },
-      onClick: () => {
-      },
-    },
-    {
       key: 'download',
       text: 'Descargar excel',
       iconProps: { iconName: 'Download' },
       onClick: () => {
-        let docs = this.filterDocs()
-        ExportExcel(docs)
+        let docs = this.filterDocs();
+        this.setState({download:true});
+       
       },
     },
     {
@@ -113,9 +113,11 @@ export default class TablaClientes extends React.Component<ITablaClientesProps, 
       onClick: () => this.getData(),
     },
   ];
+ 
   
   public render(): React.ReactElement<ITablaClientesProps> {
     const close = () => this.setState({showMessage:false});
+    
     initializeIcons();
     return (
       <div className={styles.TablaClientes}>
@@ -142,7 +144,7 @@ export default class TablaClientes extends React.Component<ITablaClientesProps, 
             />
           </div>
           
-          <ExcelPage/>
+          <Import/>
 
           {this.state.loading ? 
             <div className={styles.spinnerWrapper}>
@@ -162,7 +164,20 @@ export default class TablaClientes extends React.Component<ITablaClientesProps, 
             
         
         </Container>
-        
+        {this.state.download? 
+        // new Export({
+        //   data : this.state.filteredData,
+        //   download: this.state.download,
+        //   setDownload : this.setDownload.bind(this)
+        // })
+           <Export 
+              data = {this.state.filteredData}
+              download= {this.state.download}
+              setDownload = {this.setDownload.bind(this)}
+          
+            ></Export> 
+       
+         :""}
 
       </div>
     );
