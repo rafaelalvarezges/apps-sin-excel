@@ -18,4 +18,5 @@ export interface ITablaClientesState {
     file: any;
     filteredData:any[];
     loading:boolean;
+    download: boolean;
 }

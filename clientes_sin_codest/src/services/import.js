@@ -1,13 +1,13 @@
 import React, { Component } from "react"
-import { Button, message, Upload } from "antd"
+import { Upload } from "antd"
 import { ExcelRenderer } from "react-excel-renderer"
-import clientService from '../../services/client.service';
+import clientService from '../services/client.service';
 import {
     MessageBar,
     MessageBarType,
 } from 'office-ui-fabric-react';
 
-export default class ExcelPage extends Component {
+export default class Import extends Component {
 
     constructor(props) {
         super(props);
@@ -24,13 +24,10 @@ export default class ExcelPage extends Component {
     }
 
     updateData = async () => {
-        console.log(this.props.upload)
+      
         this.state.data.map(async row => {
-            let id = row['_id'].slice(1)
-            row['_id'] = id;
-            console.log(row)
-
-            await clientService.update(id, row).then((res, err) => {
+            if (row.codest == undefined) row.codest = ""
+            await clientService.update(row['_id'], row).then((res, err) => {
                 if (err) console.log(err)
                 console.log(res)
                 return res
@@ -115,9 +112,10 @@ export default class ExcelPage extends Component {
             } else {
                 let newRows = []
                 console.log(resp)
-                resp.rows.slice(1).map((row, index) => {
+                let rs = resp.rows.slice(1).filter(r => r.length!==0)
+                rs.map((row, index) => {
                     console.log(row)
-                    if (row && row !== "undefined") {
+                    if (row && row !== "undefined" && row !== [] && row !== null && row !== "" && row.length!==0) {
                         newRows.push({
                             _id: row[0],
                             codest: row[6],
@@ -157,7 +155,7 @@ export default class ExcelPage extends Component {
                     >
                     </Upload>
 
-                    {(this.state.showMessage && this.state.message.type == "error") ?
+                    {(this.state.showMessage && this.state.message.type === "error") ?
 
                         <MessageBar
                             messageBarType={MessageBarType.error}
@@ -170,7 +168,7 @@ export default class ExcelPage extends Component {
                         </MessageBar>
 
                         : ""}
-                    {(this.state.showMessage && this.state.message.type == "success") ?
+                    {(this.state.showMessage && this.state.message.type === "success") ?
 
                         <MessageBar
                             messageBarType={MessageBarType.success}
