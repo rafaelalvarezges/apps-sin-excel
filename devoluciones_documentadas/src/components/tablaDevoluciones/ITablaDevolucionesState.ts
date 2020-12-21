@@ -15,4 +15,7 @@ export interface ITablaDevolucionesState {
     // columns: IColumn[];
     showMessage:boolean;
     data: any[];
+    download: boolean;
+    filteredData: any[];
+    loading: boolean;
 }
