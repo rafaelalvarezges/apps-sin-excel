@@ -56,11 +56,12 @@ function Tabla(props) {
 
         col = {
           ...col,
+          filter: null,
           editor: { type:Type.CHECKBOX, value: "Y:N"},
           formatter: (cell, row, rowIndex) => {
             return (
               <span>
-                <input type="checkbox" checked={cell} onChange={()=>{}} ></input>
+                <input className={style.check} type="checkbox" checked={cell} onChange={()=>{}} ></input>
               </span>
             );
           }

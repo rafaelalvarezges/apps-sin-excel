@@ -59,6 +59,13 @@ export default class TablaDevoluciones extends React.Component<ITablaDevolucione
 
   }
 
+  private getDate(){
+    var day = new Date().getDate(); //Current Date
+    var month = new Date().getMonth() + 1; //Current Month
+    var year = new Date().getFullYear(); //Current Year
+    return day + "/" + month + "/" + year;
+  }
+
   private setDownload(download: boolean){
     this.setState({download})
     console.log(this.state.download)
@@ -168,12 +175,24 @@ export default class TablaDevoluciones extends React.Component<ITablaDevolucione
           
           <nav className="navbar navbar-light bg-light">
              <div>
-              <h6>Provisión 013 (agregado)</h6>
-              <h6>Fecha: </h6>
+              <div className={styles.header}>
+                <label >Provisión 013 (agregado) </label>  
+                <span> </span>
+              </div> 
+              <div className={styles.header}>
+                <label >Fecha: </label>  
+                <span> {this.getDate()}</span>
+              </div> 
             </div>
             <div>
-              <h6>Corte envío</h6>
-              <h6>Hoy: </h6>
+            <div className={styles.header}>
+                <label >Corte envío: </label>  
+                <span> </span>
+              </div> 
+              <div className={styles.header}>
+                <label >Hoy: </label>  
+                <span> {this.getDate()}</span>
+              </div> 
             </div>
           </nav>
 
