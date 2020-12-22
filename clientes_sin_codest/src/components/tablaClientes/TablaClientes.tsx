@@ -50,7 +50,7 @@ export default class TablaClientes extends React.Component<ITablaClientesProps, 
   private async getData() {
     this.setState({loading:true})
     let data = await clientService.getAll().then(async (res) => {
-      let result = res.data.filter((d: any) => (d.codest == " " || d.codest.length == 0 || d.codest == undefined || !d.codest))
+      let result = res.data.filter((d: any) => (d.codest == " " || d.codest == undefined || !d.codest))
       return result
     });
     await this.setState({ data: data, filteredData:data })
@@ -83,6 +83,7 @@ export default class TablaClientes extends React.Component<ITablaClientesProps, 
     let docs = this.state.filteredData.map(doc=>this.renameKey(doc))
     return docs
   }
+  
   private setDownload(download: boolean){
     this.setState({download})
     console.log(this.state.download)
