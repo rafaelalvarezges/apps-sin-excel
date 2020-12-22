@@ -68,6 +68,9 @@ button#pageDropDown{
 .react-bootstrap-table > table > thead > tr > th .filter-label {
   display: block !important;
 }
+.react-bootstrap-table-editing-cell{
+  text-align: center;
+}
 /* 
 .table{
   position:relative;

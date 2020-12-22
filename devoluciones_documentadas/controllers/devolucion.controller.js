@@ -3,19 +3,17 @@ const Devolucion = db.devolucion;
 
 // Extraemos todas las devoluciones de la base de datos
 exports.findAll = (req, res) => {
-    const title = req.query.title;
-    var condition = title ? { title: { $regex: new RegExp(title), $options: "i" } } : {};
-  
-    Devolucion.find()
-      .then(data => {
-        res.send(data);
-      })
-      .catch(err => {
-        res.status(500).send({
-          message:
-            err.message || "Error al extraer devoluciones."
-        });
+
+  Devolucion.find({ mostrar: true })
+    .then(data => {
+      res.send(data);
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Error al extraer devoluciones."
       });
+    });
 };
 
 // Extraer devolucion segun id
@@ -45,8 +43,10 @@ exports.update = (req, res) => {
   }
 
   const id = req.params.id;
-  Devolucion.findByIdAndUpdate(id, req.body, { useFindAndModify: false })
+  console.log(req.body)
+  Devolucion.findByIdAndUpdate(id, req.body, { useFindAndModify: true })
     .then(data => {
+      console.log(data)
       if (!data) {
         res.status(404).send({
           message: `No se puede actualizar la devolución con id=${id}. No se ha encontrado la devolucion!`

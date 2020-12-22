@@ -40,12 +40,13 @@ function Tabla(props) {
 
     let columns = []
     props.cols.map(column => {
+
       let col =
       {
         dataField: column.dataField,
         text: column.text,
         sort: column.sort,
-        filter: textFilter({ placeholder: column.text }),
+        filter: textFilter({ placeholder: "Introducir " + column.text }),
         headerStyle: column.headerOps ,
         align: column.align,
         editable: column.editable,
@@ -55,26 +56,16 @@ function Tabla(props) {
 
         col = {
           ...col,
-          filter:false,
+          filter: null,
           editor: { type:Type.CHECKBOX, value: "Y:N"},
           formatter: (cell, row, rowIndex) => {
             return (
               <span>
-                <input type="checkbox" checked={cell} onChange={()=>{}} ></input>
+                <input className={style.check} type="checkbox" checked={cell} onChange={()=>{}} ></input>
               </span>
             );
-          },
-          // headerFormatter: (column, colIndex) => {
-          //   return (
-          //     <div>
-          //       <label>{column.text}</label>
-          //       <div><input type="checkbox" name="eliminar" value="" /></div>
-          //     </div>
-          //   );
-          // }
-
+          }
         }
-
       }
 
       columns.push(col)
@@ -92,6 +83,9 @@ function Tabla(props) {
       return res
     })
   }
+  const afterSearch = (newResult) => {
+    props.updateFilteredData(newResult)
+  };
 
   return (
 
@@ -100,7 +94,7 @@ function Tabla(props) {
       {rows.length !== 0 ?
         <ToolkitProvider
           keyField="_id"
-          search={true}
+          search={{afterSearch}}
           data={rows}
           columns={cols}
         >
@@ -109,7 +103,9 @@ function Tabla(props) {
               <div>
                 <nav className="navbar navbar-light bg-light">
 
-                  <SearchBar {...props.searchProps} />
+                  <SearchBar {...props.searchProps} 
+                    placeholder="Buscar"
+                  />
 
                 </nav>
 
