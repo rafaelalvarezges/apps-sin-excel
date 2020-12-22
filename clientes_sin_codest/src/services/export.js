@@ -8,8 +8,6 @@ import {
 export default class Export extends React.Component {
     constructor(props){
         super(props);
-        
-       
     }
     _exporter;
     export = () => {
@@ -22,10 +20,8 @@ export default class Export extends React.Component {
         
         return (
             <div>
-               {/* <button className="k-button" onClick={this.export}>Export to Excel</button> */}
                 <ExcelExport
                     data={this.props.data}
-                    // group={group}
                     fileName="Listado.xlsx"
                     ref={(exporter) => { this._exporter = exporter; if(exporter)this.export() }}
                 >
