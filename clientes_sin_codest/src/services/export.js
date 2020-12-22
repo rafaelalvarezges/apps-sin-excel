@@ -29,27 +29,11 @@ export default class Export extends React.Component {
                     fileName="Listado.xlsx"
                     ref={(exporter) => { this._exporter = exporter; if(exporter)this.export() }}
                 >
-                    <ExcelExportColumn field="_id" title="Id"  />
-                    <ExcelExportColumn field="pdv" title="PDV" />
-                    <ExcelExportColumn field="global" title="Global" />
-                    <ExcelExportColumn field="codcli" title="Cliente" />
-                    <ExcelExportColumn field="nombre" title="Nombre" />
-                    <ExcelExportColumn field="cadena" title="Cadena" />
-                    <ExcelExportColumn field="codest" title="Cod. Est" />
-                    <ExcelExportColumn field="nomext" title="Com. Exterior" />
-                    <ExcelExportColumn field="nomdrv" title="DRV" />
-                    <ExcelExportColumn
-                        field="vta_anio_ant"
-                        title="Venta 2019"
-                        cellOptions={{ format: '#.##0,00' }}
-                    />
-                    <ExcelExportColumn
-                        field="vta_anio_actual"
-                        title="Venta 2020"
-                        cellOptions={{ format: '#.##0,00' }}
-                    />
+                     {this.props.cols.map((col, index) =>{
+                         return <ExcelExportColumn field={col.dataField} title={col.text} key={index} />
+                    })}
                     
-                </ExcelExport>
+                </ExcelExport> 
             </div>
         );
     }

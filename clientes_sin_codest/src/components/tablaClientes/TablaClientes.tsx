@@ -167,16 +167,11 @@ export default class TablaClientes extends React.Component<ITablaClientesProps, 
         
         </Container>
         {this.state.download? 
-        // new Export({
-        //   data : this.state.filteredData,
-        //   download: this.state.download,
-        //   setDownload : this.setDownload.bind(this)
-        // })
            <Export 
               data = {this.state.filteredData}
               download= {this.state.download}
               setDownload = {this.setDownload.bind(this)}
-          
+              cols = {cols}
             ></Export> 
        
          :""}
