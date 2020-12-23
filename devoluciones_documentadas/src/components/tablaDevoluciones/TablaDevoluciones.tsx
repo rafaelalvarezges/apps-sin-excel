@@ -27,13 +27,16 @@ const cols = [
   { dataField: 'fecalb',      text: 'Fecha albarán',  sort: true, align: "center",  headerOps: { width: '140px', textAlign: 'left' },     editable: false,  editor: { type:"text" } },
   { dataField: 'tiptra',      text: 'Tiptra',         sort: true, align: "center",  headerOps: { width: '70px' },                         editable: false,  editor: { type:"text" } },
   { dataField: 'vinculo',     text: 'Vínculo',        sort: true, align: "left",    headerOps: { width: '370px', textAlign: 'left' },     editable: true,   editor: { type:"text" } },
+  { dataField: 'link',        text: 'Link',           sort: true, align: "left",    headerOps: { width: '70px', textAlign: 'left' },     editable: false,  editor: { type:"text" } },
   { dataField: 'coment',      text: 'Comentario',     sort: true, align: "left",    headerOps: { width: '370px', textAlign: 'left' },     editable: true,   editor: { type:"text" } },
   { dataField: 'fecrec',      text: 'Fecha',          sort: true, align: "center",  headerOps: { width: '100px', textAlign: 'left' },     editable: false,  editor: { type:"text" } },
   { dataField: 'anyo',        text: 'Ultimo mail',    sort: true, align: "center",  headerOps: { width: '140px', textAlign: 'left' },     editable: false,  editor: { type:"text" } },
   { dataField: 'eliminar',    text: 'Eliminar',       sort: true, align: "center",  headerOps: { width: '100px', textAlign: 'left' },     editable: true,   editor: { type:"checkbox", value: 'true:false'} },
+  
 ]
 
 export default class TablaDevoluciones extends React.Component<ITablaDevolucionesProps, ITablaDevolucionesState>{
+  _isMounted = false;
   constructor(props: ITablaDevolucionesProps) {
     super(props);
     this.state = {
@@ -43,20 +46,29 @@ export default class TablaDevoluciones extends React.Component<ITablaDevolucione
       filteredData: [],
       loading: false
     }
-    this.getData()
   }
 
+  async componentDidMount() {
+    this._isMounted = true;
+    await this.getData()
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false;
+  }
 
   private async getData() {
-    this.setState({loading:true})
-    let data = await clientService.getAll().then(async (res) => {
-      return res.data
-    });
-    await this.setState({ data: data, filteredData:data })
-    
-    this.setState({loading:false})
+    let data = []
+    if(this._isMounted){
+      this.setState({loading:true})
+      data = await clientService.getAll().then(async (res) => {
+        this.setState({ data: res.data, filteredData:res.data })
+        return res.data
+      });
+      this.setState({loading:false})
+    }
     return data
-
+    
   }
 
   private getDate(){
@@ -107,7 +119,7 @@ export default class TablaDevoluciones extends React.Component<ITablaDevolucione
       await clientService.update(p['_id'], p);
       return p;
     });
-    this.getData()
+    await this.getData()
     
   }
 
@@ -186,7 +198,7 @@ export default class TablaDevoluciones extends React.Component<ITablaDevolucione
             </div>
             <div>
             <div className={styles.header}>
-                <label >Corte envío: </label>  
+                <label >Corte envío: 01/05/2015</label>  
                 <span> </span>
               </div> 
               <div className={styles.header}>
