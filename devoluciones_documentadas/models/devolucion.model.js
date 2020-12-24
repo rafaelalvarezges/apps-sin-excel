@@ -12,6 +12,7 @@ module.exports = mongoose => {
           fecalb: String,
           tiptra: String,
           vinculo: String,
+          documento:String,
           fecrec: String,
           anyo: String,
           coment: String,

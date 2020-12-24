@@ -72,6 +72,11 @@
     .react-bootstrap-table-editing-cell{
         text-align: center;
     }
+
+    button:focus {
+        
+        outline: none;
+    }
 } 
 
 
