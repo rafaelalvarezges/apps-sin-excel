@@ -18,9 +18,11 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react"
+    "jsx": "react-jsx"
   },
   "include": [
-    "src", "../database.js", "../clientes_sin_codest/src/components/tabla/excelPage.js"
+    "src",
+    "../database.js",
+    "../clientes_sin_codest/src/components/tabla/excelPage.js"
   ]
 }
