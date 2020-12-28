@@ -138,6 +138,7 @@ export default class TablaClientes extends React.Component<ITablaClientesProps, 
     initializeIcons();
     return (
       <div className={styles.TablaClientes}>
+        {this.props.conexiones}
         <Container maxWidth="xl" >
           {( this.props.conexiones > 1 && this.state.showMessage ) ?
         
