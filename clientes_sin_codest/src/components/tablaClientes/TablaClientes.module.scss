@@ -33,13 +33,14 @@
         table-layout: fixed !important;
         width: auto;
         // position: relative;
-        }
+        } 
     .react-bootstrap-table-pagination-total{
         padding: 10px !important;
     }
     th{
         position: sticky;
         top: 0;
+        font-weight: 500;
     }
     .spinnerWrapper{
         padding: 50px;
