@@ -21,41 +21,50 @@ export class List extends React.Component<{}, {}> {
       {
         url:"http://10.132.0.14:5000/", imgUrl:"/img/clients.png", title:"Clientes", description:"Aplicación de devoluciones documentadas"
       },
-      {
-        url: "http://10.132.0.14:4000/", imgUrl:"/img/devs.png", title:"Devoluciones", description:"Aplicación para introducir códigos estadísticos en clientes"
-      },
-      {
-        url:"http://10.132.0.14:5000/", imgUrl:"/img/clients.png", title:"Clientes", description:"Aplicación de devoluciones documentadas"
-      },
-      {
-        url: "http://10.132.0.14:4000/", imgUrl:"/img/devs.png", title:"Devoluciones", description:"Aplicación para introducir códigos estadísticos en clientes"
-      },
-      {
-        url:"http://10.132.0.14:5000/", imgUrl:"/img/clients.png", title:"Clientes", description:"Aplicación de devoluciones documentadas"
-      }
+      // {
+      //   url: "http://10.132.0.14:4000/", imgUrl:"/img/devs.png", title:"Devoluciones", description:"Aplicación para introducir códigos estadísticos en clientes"
+      // },
+      // {
+      //   url:"http://10.132.0.14:5000/", imgUrl:"/img/clients.png", title:"Clientes", description:"Aplicación de devoluciones documentadas"
+      // },
+      // {
+      //   url: "http://10.132.0.14:4000/", imgUrl:"/img/devs.png", title:"Devoluciones", description:"Aplicación para introducir códigos estadísticos en clientes"
+      // },
+      // {
+      //   url:"http://10.132.0.14:5000/", imgUrl:"/img/clients.png", title:"Clientes", description:"Aplicación de devoluciones documentadas"
+      // }
     ]
 
 
     return (
       <div className={styles.List}>
-        <Container fluid="md">
+        <Container fluid="lg">
           {/* <Stack horizontal tokens={sectionStackTokens} > */}
           <Row>
+            <Col lg md xs ="auto"></Col>
+            <Col lg="8" md="10" xs="12">
+                <Row>
+                
 
-            {apps.map(app=>{
-              return(
-                <Col xs="auto" >
-                  <ListItem
-                    url={app.url}
-                    imgUrl={app.imgUrl}
-                    title={app.title}
-                    description={app.description}
-                  ></ListItem>
-                </Col>
-              )
-            })}
+                {apps.map(app=>{
+                  return(
+                    <Col >
+                      <ListItem
+                        url={app.url}
+                        imgUrl={app.imgUrl}
+                        title={app.title}
+                        description={app.description}
+                      ></ListItem>
+                    </Col>
+                  )
+                })}
+                </Row>
+
+            </Col>
+            <Col lg md xs ="auto"></Col>
             
           </Row>
+          
 
 
           {/* </Stack> */}
