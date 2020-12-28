@@ -57,13 +57,13 @@ export default class ListItem extends React.Component<IListItem, {}> {
     };
     
     const sectionStackTokens: IStackTokens = { childrenGap: 30 };
-    const cardTokens: ICardTokens = { childrenMargin: 12};
+    const cardTokens: ICardTokens = { childrenMargin: 12, maxWidth: "inherit"};
     const footerCardSectionTokens: ICardSectionTokens = { padding: '12px 0px 0px' };
     const backgroundImageCardSectionTokens: ICardSectionTokens = { padding: 12 };
 
     return (
       <div className={styles.ListItem}>
-        <Stack horizontal tokens={sectionStackTokens}>
+        {/* <Stack horizontal tokens={sectionStackTokens}> */}
 
           <Card
             aria-label="Clickable vertical card with image bleeding at the top of the card"
@@ -99,7 +99,7 @@ export default class ListItem extends React.Component<IListItem, {}> {
             </Card.Section>
           </Card>
 
-        </Stack>
+        {/* </Stack> */}
       </div>
     );
   }
