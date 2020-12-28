@@ -34,6 +34,7 @@ const exportProps: any = { fileName: "clientes", exportType: "csv" }
 
 
 export default class TablaClientes extends React.Component<ITablaClientesProps, ITablaClientesState>{
+  _isMounted = false;
   constructor(props: ITablaClientesProps) {
     super(props);
     this.state = {
@@ -44,19 +45,32 @@ export default class TablaClientes extends React.Component<ITablaClientesProps, 
       loading:true, 
       download: false
     }
-    this.getData()
+  }
+
+  async componentDidMount() {
+    this._isMounted = true;
+    await this.getData()
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false;
   }
 
   private async getData() {
+    let data = []
+    if(this._isMounted){
     this.setState({loading:true})
-    let data = await clientService.getAll().then(async (res) => {
+      data = await clientService.getAll().then(async (res) => {
       let result = res.data.filter((d: any) => (d.codest == " " || d.codest == undefined || !d.codest))
+      this.setState({ data: result, filteredData:result })
       return result
     });
-    await this.setState({ data: data, filteredData:data })
+    // await this.setState({ data: data, filteredData:data })
     
     this.setState({loading:false})
+  }
     return data
+  // }
 
   }
 

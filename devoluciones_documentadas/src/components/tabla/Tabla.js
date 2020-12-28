@@ -7,6 +7,7 @@ import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit';
 import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
 import style from '../tablaDevoluciones/TablaDevoluciones.module.scss';
 import clientService from '../../services/devolucion.service';
+import {  Icon } from 'office-ui-fabric-react';
 
 const { SearchBar } = Search;
 
@@ -35,7 +36,7 @@ function Tabla(props) {
     paginationTotalRenderer: customTotal,
   }
 
-
+  
   function getCols() {
 
     let columns = []
@@ -46,7 +47,7 @@ function Tabla(props) {
         dataField: column.dataField,
         text: column.text,
         sort: column.sort,
-        filter: textFilter({ placeholder: "Introducir " + column.text }),
+        filter: textFilter({ placeholder: "Filtrar " + column.text }),
         headerStyle: column.headerOps ,
         align: column.align,
         editable: column.editable,
@@ -64,6 +65,29 @@ function Tabla(props) {
                 <input className={style.check} type="checkbox" checked={cell} onChange={()=>{}} ></input>
               </span>
             );
+          }
+        }
+      }else if(column.dataField === "link"){
+        col = {
+          ...col,
+          formatter: (cell, row, rowIndex) => {
+            if(row.vinculo){
+              return (
+                <div className={style.linkCell}>
+                  <a href={row.vinculo} target="_blank">
+                    <Icon iconName="OpenInNewTab" onClick={()=>{
+                      setTimeout(() => {
+                        window.open(row.vinculo, '_blank');
+                      }, 2000); // 1 second wasn't enough lol
+                      // window.open("http://127.0.0.1:8082"+row.vinculo, '_blank');
+                      
+                      }} />
+                  </a>
+                  {/* {cell} */}
+                </div>
+                // <a href={cell}> {cell} </a>
+              );
+            }
           }
         }
       }

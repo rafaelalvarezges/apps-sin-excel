@@ -2,7 +2,7 @@
     font-family: "Segoe UI", "Segoe UI Web (West European)", "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif;
     -webkit-font-smoothing: antialiased;
     font-size: 14px;
-    font-weight: 600;
+    // font-weight: 600;
 
     .form-control:focus {
         color: #495057;
@@ -10,7 +10,9 @@
          border-color: none;
         outline: 0;
          box-shadow: none;
+         
     }
+    
 
     td :focus{
         outline: none;
@@ -40,10 +42,29 @@
     th{
         position: sticky;
         top: 0;
+        font-weight: 500;
     }
 
     .header{
         display: flex;
+        font-weight: 500;
+
+        
+    }
+    // input{
+    //     border: none;
+    //     border-bottom: 1px solid #00000033;
+    //     border-radius: 0%;
+    //     text-overflow: ellipsis;
+    //     padding-left: inherit;
+    //     background-color: #f8f9fa;
+    // }
+    
+    .linkCell{
+        display: flex;
+        i{
+            padding-right: 10px;
+        }
     }
     .header label{
         padding-right: 5px;
@@ -55,7 +76,12 @@
     .react-bootstrap-table-editing-cell{
         text-align: center;
     }
-}
+
+    button:focus {
+        
+        outline: none;
+    }
+} 
 
 
 

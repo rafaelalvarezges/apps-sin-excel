@@ -18,4 +18,6 @@ export interface ITablaDevolucionesState {
     download: boolean;
     filteredData: any[];
     loading: boolean;
+    procesados:boolean;
+    pendientesProcesar:boolean;
 }

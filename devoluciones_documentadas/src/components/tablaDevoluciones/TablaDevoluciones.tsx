@@ -2,20 +2,18 @@ import * as React from 'react';
 import styles from './TablaDevoluciones.module.scss';
 import { ITablaDevolucionesProps } from './ITablaDevolucionesProps';
 import { ITablaDevolucionesState } from './ITablaDevolucionesState';
-import Container from '@material-ui/core/Container';
 import Tabla from '../tabla/Tabla';
-import { DefaultButton } from 'office-ui-fabric-react';
-import { CommandBar, ICommandBarItemProps } from 'office-ui-fabric-react/lib/CommandBar';
+import Container from '@material-ui/core/Container';
+
+//Fabric ui
 import { initializeIcons } from '@uifabric/icons';
 import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
-import {
-  MessageBar,
-  MessageBarType,
-} from 'office-ui-fabric-react';
+import {  MessageBar,  MessageBarType,} from 'office-ui-fabric-react';
+import { CommandBar, ICommandBarItemProps } from 'office-ui-fabric-react/lib/CommandBar';
+
 // Servicios
 import Export from '../../services/export';
 import clientService from '../../services/devolucion.service';
-
 
 
 const cols = [
@@ -27,13 +25,16 @@ const cols = [
   { dataField: 'fecalb',      text: 'Fecha albarán',  sort: true, align: "center",  headerOps: { width: '140px', textAlign: 'left' },     editable: false,  editor: { type:"text" } },
   { dataField: 'tiptra',      text: 'Tiptra',         sort: true, align: "center",  headerOps: { width: '70px' },                         editable: false,  editor: { type:"text" } },
   { dataField: 'vinculo',     text: 'Vínculo',        sort: true, align: "left",    headerOps: { width: '370px', textAlign: 'left' },     editable: true,   editor: { type:"text" } },
+  { dataField: 'link',        text: 'Link',           sort: true, align: "left",    headerOps: { width: '70px', textAlign: 'left' },     editable: false,  editor: { type:"text" } },
   { dataField: 'coment',      text: 'Comentario',     sort: true, align: "left",    headerOps: { width: '370px', textAlign: 'left' },     editable: true,   editor: { type:"text" } },
   { dataField: 'fecrec',      text: 'Fecha',          sort: true, align: "center",  headerOps: { width: '100px', textAlign: 'left' },     editable: false,  editor: { type:"text" } },
   { dataField: 'anyo',        text: 'Ultimo mail',    sort: true, align: "center",  headerOps: { width: '140px', textAlign: 'left' },     editable: false,  editor: { type:"text" } },
   { dataField: 'eliminar',    text: 'Eliminar',       sort: true, align: "center",  headerOps: { width: '100px', textAlign: 'left' },     editable: true,   editor: { type:"checkbox", value: 'true:false'} },
+  
 ]
 
 export default class TablaDevoluciones extends React.Component<ITablaDevolucionesProps, ITablaDevolucionesState>{
+  _isMounted = false; //Controlamos que el componente se haya inicializado antes de cambiar estados
   constructor(props: ITablaDevolucionesProps) {
     super(props);
     this.state = {
@@ -41,28 +42,38 @@ export default class TablaDevoluciones extends React.Component<ITablaDevolucione
       showMessage: true, 
       download: false,
       filteredData: [],
-      loading: false
+      loading: false, 
+      procesados:false, 
+      pendientesProcesar:true
     }
-    this.getData()
   }
 
+  async componentDidMount() {
+    this._isMounted = true;
+    await this.getData()
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false;
+  }
 
   private async getData() {
-    this.setState({loading:true})
-    let data = await clientService.getAll().then(async (res) => {
-      return res.data
-    });
-    await this.setState({ data: data, filteredData:data })
-    
-    this.setState({loading:false})
-    return data
-
+    if(this._isMounted){
+      await this.setState({loading:true})
+      let data = await clientService.getAll().then(async (res) => {
+        return res.data
+      });
+      await this.setState({ data: data, filteredData:data}, ()=>{
+        this.setState({loading:false})
+      })
+      return data
+    }
   }
 
   private getDate(){
-    var day = new Date().getDate(); //Current Date
-    var month = new Date().getMonth() + 1; //Current Month
-    var year = new Date().getFullYear(); //Current Year
+    var day = new Date().getDate(); 
+    var month = new Date().getMonth() + 1; 
+    var year = new Date().getFullYear(); 
     return day + "/" + month + "/" + year;
   }
 
@@ -100,17 +111,26 @@ export default class TablaDevoluciones extends React.Component<ITablaDevolucione
     this.setState({ filteredData });
   }
 
-  private async procesar(){
-    let procesados = await this.state.data.filter(fd=>fd.eliminar==true);
-    await procesados.map(async p=>{
-      p.mostrar = false;
-      await clientService.update(p['_id'], p);
-      return p;
-    });
-    this.getData()
-    
-  }
+  private procesar(){
 
+    return new Promise((resolve, reject)=>{
+      console.log("procesando")
+      let procesados =  this.state.data.filter(fd=>fd.eliminar==true);
+      if(procesados.length==0) this.setState({procesados:false, pendientesProcesar:false})
+      let count = 0;
+       procesados.map( p=>{
+        p.mostrar = false;
+        clientService.update(p['_id'], p).then(res=>{
+          if(res) count++;
+          if(count==procesados.length) {
+            this.setState({procesados:true, pendientesProcesar:true})
+            resolve(procesados)
+          }
+        })
+      });
+    })
+  }
+  
   private _items: ICommandBarItemProps[] = [
  
     {
@@ -121,14 +141,15 @@ export default class TablaDevoluciones extends React.Component<ITablaDevolucione
         let docs = this.filterDocs();
         console.log(this.state.filteredData)
         this.setState({download:true});
-       
       },
     },
     {
       key: 'procesar',
       text: 'Procesar',
       iconProps: { iconName: 'Share' },
-      onClick: () => this.procesar(),
+      onClick: () => {
+        this.procesar().then(()=>this.getData())
+      }
     },
     {
       key: 'update',
@@ -140,6 +161,8 @@ export default class TablaDevoluciones extends React.Component<ITablaDevolucione
 
   public render(): React.ReactElement<ITablaDevolucionesProps> {
     const close = () => this.setState({showMessage:false});
+    const closeProcesados = () => this.setState({procesados:false});
+    const closePendientes = () => this.setState({pendientesProcesar:true});
     initializeIcons();
     return (
       <div className={styles.TablaDevoluciones}>
@@ -160,6 +183,33 @@ export default class TablaDevoluciones extends React.Component<ITablaDevolucione
         
         : ""}
 
+        { this.state.procesados  ?
+            
+            <MessageBar
+              messageBarType={MessageBarType.success}
+              isMultiline={false}
+              onDismiss={closeProcesados}
+              dismissButtonAriaLabel="Close"
+            >
+            Se han actualizado los datos correctamente
+            
+          </MessageBar>
+        
+        : ""}
+         { !this.state.pendientesProcesar  ?
+            
+            <MessageBar
+              messageBarType={MessageBarType.error}
+              isMultiline={false}
+              onDismiss={closePendientes}
+              dismissButtonAriaLabel="Close"
+            >
+            No se han encontrado registros pendientes para eliminar
+            
+          </MessageBar>
+        
+        : ""}
+
           <div>
             <CommandBar
               items={this._items}
@@ -167,12 +217,6 @@ export default class TablaDevoluciones extends React.Component<ITablaDevolucione
             />
           </div>
 
-          {this.state.loading ? 
-            <div className={styles.spinnerWrapper}>
-              <Spinner label="Cargando datos"></Spinner>
-            </div>
-          : ""}
-          
           <nav className="navbar navbar-light bg-light">
              <div>
               <div className={styles.header}>
@@ -186,7 +230,7 @@ export default class TablaDevoluciones extends React.Component<ITablaDevolucione
             </div>
             <div>
             <div className={styles.header}>
-                <label >Corte envío: </label>  
+                <label >Corte envío: 01/05/2015</label>  
                 <span> </span>
               </div> 
               <div className={styles.header}>
@@ -196,9 +240,14 @@ export default class TablaDevoluciones extends React.Component<ITablaDevolucione
             </div>
           </nav>
 
+          {this.state.loading ? 
+            <div className={styles.spinnerWrapper}>
+              <Spinner label="Cargando datos"></Spinner>
+            </div>
+          : ""}
           
 
-          {this.state.data.length != 0 ?
+          {(this.state.data.length != 0 && !this.state.loading) ?
 
             <Tabla
               rows={this.state.data}
@@ -216,7 +265,6 @@ export default class TablaDevoluciones extends React.Component<ITablaDevolucione
               setDownload = {this.setDownload.bind(this)}
               cols = {cols}
             ></Export> 
-       
          :""}
 
       </div>

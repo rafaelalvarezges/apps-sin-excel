@@ -29,7 +29,7 @@ code {
   color: #495057;
   background-color: #fff;
   background-clip: padding-box;
-  border: 1px solid #ced4da;
+  /* border: inherit; */
   border-radius: .25rem;
   /* transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out; */
 }
@@ -48,6 +48,7 @@ button#pageDropDown{
   background-color:rgb(239, 239, 239) ;
   border:1px solid transparent; ;
   color: black;
+  font-size: small;
 }
 .pagination{
   float: right;
@@ -71,12 +72,22 @@ button#pageDropDown{
 .react-bootstrap-table-editing-cell{
   text-align: center;
 }
-/* 
-.table{
-  position:relative;
+.btn-secondary.focus, .btn-secondary:focus, button #pageDown:focus, button #pageDown:active{
+  box-shadow: none;
+}
+.btn-secondary:not(:disabled):not(.disabled).active:focus, .btn-secondary:not(:disabled):not(.disabled):active:focus, .show>.btn-secondary.dropdown-toggle:focus {
+  box-shadow: none;
+}
+.text-filter{
+  font-size: small;
 }
 
-.table thead th {
-  position: sticky;
-  top: 0;
-} */
+.header input{
+  /* border: none;
+  border-bottom: 1px solid #00000033; */
+}
+#search-bar-0{
+      
+  background-color: white;
+
+}
