@@ -22,22 +22,17 @@ app.use(express.static(path.join(__dirname, 'build', 'index.html')));
 require("./routes/client.routes")(app);
 
  // Configuracion del socket
-let connectedUsersCount = 0;
-io.on('connection', socket => {
+ let connectedUsersCount = 0;
+ io.on('connection', socket => {
+   connectedUsersCount ++;
+   io.emit('usuarios', connectedUsersCount);
+ 
+   socket.on('disconnect',()=>{ 
+     connectedUsersCount --;
+     io.emit('usuarios', connectedUsersCount);
+   });
+ });  
 
-  setTimeout(function () {
-    console.log('Socket timeout: closing connection');
-    socket.close();
-  }, 1000 * 60 * 300);
-
-  connectedUsersCount ++;
-  io.emit('usuarios', connectedUsersCount);
-
-  socket.on('disconnect',()=>{ 
-    connectedUsersCount --;
-    io.emit('usuarios', connectedUsersCount);
-  });
-}); 
 
 // Conexion a la base de datos
 const db = require("./models");
