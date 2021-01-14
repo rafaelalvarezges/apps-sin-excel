@@ -25,12 +25,12 @@ const cols = [
   { dataField: 'fecalb',      text: 'Fecha albarán',  sort: true, align: "center",  headerOps: { width: '140px', textAlign: 'left' },     editable: false,  editor: { type:"text" } },
   { dataField: 'tiptra',      text: 'Tiptra',         sort: true, align: "center",  headerOps: { width: '70px' },                         editable: false,  editor: { type:"text" } },
   { dataField: 'vinculo',     text: 'Vínculo',        sort: true, align: "left",    headerOps: { width: '370px', textAlign: 'left' },     editable: true,   editor: { type:"text" } },
-  { dataField: 'link',        text: 'Link',           sort: true, align: "left",    headerOps: { width: '70px', textAlign: 'left' },     editable: false,  editor: { type:"text" } },
+  // { dataField: 'link',        text: 'Link',           sort: true, align: "left",    headerOps: { width: '70px', textAlign: 'left' },      editable: false,  editor: { type:"text" } },
   { dataField: 'coment',      text: 'Comentario',     sort: true, align: "left",    headerOps: { width: '370px', textAlign: 'left' },     editable: true,   editor: { type:"text" } },
   { dataField: 'fecrec',      text: 'Fecha',          sort: true, align: "center",  headerOps: { width: '100px', textAlign: 'left' },     editable: false,  editor: { type:"text" } },
   { dataField: 'anyo',        text: 'Ultimo mail',    sort: true, align: "center",  headerOps: { width: '140px', textAlign: 'left' },     editable: false,  editor: { type:"text" } },
   { dataField: 'eliminar',    text: 'Eliminar',       sort: true, align: "center",  headerOps: { width: '100px', textAlign: 'left' },     editable: true,   editor: { type:"checkbox", value: 'true:false'} },
-  
+
 ]
 
 export default class TablaDevoluciones extends React.Component<ITablaDevolucionesProps, ITablaDevolucionesState>{
@@ -39,11 +39,11 @@ export default class TablaDevoluciones extends React.Component<ITablaDevolucione
     super(props);
     this.state = {
       data: [],
-      showMessage: true, 
+      showMessage: true,
       download: false,
       filteredData: [],
-      loading: false, 
-      procesados:false, 
+      loading: false,
+      procesados:false,
       pendientesProcesar:true
     }
   }
@@ -71,9 +71,9 @@ export default class TablaDevoluciones extends React.Component<ITablaDevolucione
   }
 
   private getDate(){
-    var day = new Date().getDate(); 
-    var month = new Date().getMonth() + 1; 
-    var year = new Date().getFullYear(); 
+    var day = new Date().getDate();
+    var month = new Date().getMonth() + 1;
+    var year = new Date().getFullYear();
     return day + "/" + month + "/" + year;
   }
 
@@ -82,7 +82,7 @@ export default class TablaDevoluciones extends React.Component<ITablaDevolucione
     console.log(this.state.download)
   }
 
-  // Renombramos las columnas del excel 
+  // Renombramos las columnas del excel
   private renameKey(object: any):any{
 
     const clonedObj = {...object};
@@ -92,7 +92,7 @@ export default class TablaDevoluciones extends React.Component<ITablaDevolucione
       delete clonedObj[col.dataField];
       clonedObj[col.text] = targetKey;
     })
-  
+
     return clonedObj;
   };
 
@@ -130,9 +130,9 @@ export default class TablaDevoluciones extends React.Component<ITablaDevolucione
       });
     })
   }
-  
+
   private _items: ICommandBarItemProps[] = [
- 
+
     {
       key: 'download',
       text: 'Descargar excel',
@@ -168,23 +168,23 @@ export default class TablaDevoluciones extends React.Component<ITablaDevolucione
       <div className={styles.TablaDevoluciones}>
 
         <Container maxWidth="xl" >
-        
+
         {( this.props.conexiones > 1 && this.state.showMessage ) ?
-            
+
             <MessageBar
               messageBarType={MessageBarType.warning}
               isMultiline={false}
               onDismiss={close}
               dismissButtonAriaLabel="Close"
             >
-            Hay más usuarios utilizando la aplicación. Por favor, actualiza la tabla antes de modificar los datos. 
-            
+            Hay más usuarios utilizando la aplicación. Por favor, actualiza la tabla antes de modificar los datos.
+
           </MessageBar>
-        
+
         : ""}
 
         { this.state.procesados  ?
-            
+
             <MessageBar
               messageBarType={MessageBarType.success}
               isMultiline={false}
@@ -192,12 +192,12 @@ export default class TablaDevoluciones extends React.Component<ITablaDevolucione
               dismissButtonAriaLabel="Close"
             >
             Se han actualizado los datos correctamente
-            
+
           </MessageBar>
-        
+
         : ""}
          { !this.state.pendientesProcesar  ?
-            
+
             <MessageBar
               messageBarType={MessageBarType.error}
               isMultiline={false}
@@ -205,9 +205,9 @@ export default class TablaDevoluciones extends React.Component<ITablaDevolucione
               dismissButtonAriaLabel="Close"
             >
             No se han encontrado registros pendientes para eliminar
-            
+
           </MessageBar>
-        
+
         : ""}
 
           <div>
@@ -220,32 +220,32 @@ export default class TablaDevoluciones extends React.Component<ITablaDevolucione
           <nav className="navbar navbar-light bg-light">
              <div>
               <div className={styles.header}>
-                <label >Provisión 013 (agregado) </label>  
+                <label >Provisión 013 (agregado) </label>
                 <span> </span>
-              </div> 
+              </div>
               <div className={styles.header}>
-                <label >Fecha: </label>  
+                <label >Fecha: </label>
                 <span> {this.getDate()}</span>
-              </div> 
+              </div>
             </div>
             <div>
             <div className={styles.header}>
-                <label >Corte envío: 01/05/2015</label>  
+                <label >Corte envío: 01/05/2015</label>
                 <span> </span>
-              </div> 
+              </div>
               <div className={styles.header}>
-                <label >Hoy: </label>  
+                <label >Hoy: </label>
                 <span> {this.getDate()}</span>
-              </div> 
+              </div>
             </div>
           </nav>
 
-          {this.state.loading ? 
+          {this.state.loading ?
             <div className={styles.spinnerWrapper}>
               <Spinner label="Cargando datos"></Spinner>
             </div>
           : ""}
-          
+
 
           {(this.state.data.length != 0 && !this.state.loading) ?
 
@@ -258,13 +258,13 @@ export default class TablaDevoluciones extends React.Component<ITablaDevolucione
             : <></>}
         </Container>
 
-        {this.state.download? 
-           <Export 
+        {this.state.download?
+           <Export
               data = {this.state.filteredData}
               download= {this.state.download}
               setDownload = {this.setDownload.bind(this)}
               cols = {cols}
-            ></Export> 
+            ></Export>
          :""}
 
       </div>
