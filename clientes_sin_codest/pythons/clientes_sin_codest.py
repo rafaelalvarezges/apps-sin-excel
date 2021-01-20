@@ -6,6 +6,7 @@ def carga_datos():
     col = 'clientes_sin_codest'
     db = conectar_mongo()
     collect = db[col]
+    collect.drop()
     i = 1
 
     dict_mongo = {'_id':0, 
