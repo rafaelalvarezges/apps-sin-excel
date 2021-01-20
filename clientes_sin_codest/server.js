@@ -24,6 +24,7 @@ require("./routes/client.routes")(app);
  // Configuracion del socket
  let connectedUsersCount = 0;
  io.on('connection', socket => {
+   console.log(connectedUsersCount)
    connectedUsersCount ++;
    io.emit('usuarios', connectedUsersCount);
  
@@ -36,7 +37,7 @@ require("./routes/client.routes")(app);
 
 // Conexion a la base de datos
 const db = require("./models");
-const PORT = process.env.PORT || 8081;
+const PORT = process.env.PORT || 3009;
 db.mongoose
   .connect(db.url, {
     useNewUrlParser: true,
