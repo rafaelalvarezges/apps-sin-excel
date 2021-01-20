@@ -74,6 +74,11 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+<<<<<<< HEAD
   }
    
+=======
+  },
+  "proxy":"http://localhost:8081"
+>>>>>>> c87a5419e137f2cbc978d3e11c9cb6e7251c2952
 }
