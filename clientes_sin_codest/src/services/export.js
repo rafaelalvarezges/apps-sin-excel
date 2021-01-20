@@ -6,12 +6,17 @@ import {
 
 
 export default class Export extends React.Component {
-    codigos = ["ADMON. PUBLICA", "BAJA DEFINITIVA", "CENTRO COMERCIAL", "CLIENTE DEL GRUPO", "CLIENTES CONTADOS", "COMPAÑIA ELECTRICA", "COMPETIDOR"]
+    codigos = [ "ADMON. PUBLICA", "BAJA DEFINITIVA", "CENTRO COMERCIAL", "CLIENTE DEL GRUPO", "CLIENTES CONTADOS", "COMPAÑIA ELECTRICA", "COMPETIDOR",
+                "CONSTRUCTORA", "CUADRISTA", "CUADRISTA AUTCION.", "DISTRIBUIDOR", "EMPLEADOS GES", "EMPLEADOS SCHNEIDER", "FACILITY SERVICES", "GGCC",
+                "HOTELES", "INDUSTRIA", "INST. AUTONOMO", "INST. CLIMA-FONT. A", "INST. CLIMA-FONT. B", "INST. CLIMA-FONT.TOP", "INST. ELECTRICO A", 
+                "INST. ELECTRICO B", "INST. ELECTRICO TOP", "INST. INTEGRAL A", "INST. INTEGRAL B", "INST. INTEGRAL TOP", "MANT. ALUM. PUBLICO", "OEM",
+                "OTROS", "TELECOMUNICACIONES", "TRASPORTES EXTERNOS", "UTE"]
     lastItem = 0
     datos = {}
     constructor(props){
         super(props);
         this.datos = props.data
+
     }
     _exporter;
     export = () => {
@@ -24,24 +29,24 @@ export default class Export extends React.Component {
                 console.log("es undefined")
                 let d = this.datos
                 d.push({
-                    cadena: null,
-                    codcli: "",
-                    codest: null,
-                    global: "",
-                    nombre: "",
-                    nomdrv: "",
-                    nomext: "",
-                    pdv: "",
-                    vta_anio_actual: "",
-                    vta_anio_ant: "",
-                    _id: "",
+                    "":"",
+                    "": "",
+                    "": null,
+                    "": "",
+                    "": "",
+                    "": "",
+                    "": "",
+                    "": "",
+                    "": "",
+                    "": "",
+                    "": "",
                     "codigos": this.codigos[i]
                 })
                 this.datos = d
 
             }
         }
-        this._exporter.save(this.props.data);
+        this._exporter.save(this.datos);
         // console.log(this.props.data)
         this.props.setDownload(false)
     }
@@ -60,7 +65,7 @@ export default class Export extends React.Component {
                          return <ExcelExportColumn field={col.dataField} title={col.text} key={index} />
                     })}
 
-                    <ExcelExportColumn field="codigos" title="Códigos" key={this.lastItem + 1} />
+                    <ExcelExportColumn field="codigos" title="Códigos" />
                     
                 </ExcelExport> 
             </div>
