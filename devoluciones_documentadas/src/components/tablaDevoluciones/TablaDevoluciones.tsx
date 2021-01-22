@@ -24,7 +24,7 @@ const cols = [
   { dataField: 'implin',      text: 'Importe',        sort: true, align: "right",   headerOps: { width: '90px',  textAlign: 'left' },     editable: false,  editor: { type:"text" } },
   { dataField: 'fecalb',      text: 'Fecha albarán',  sort: true, align: "center",  headerOps: { width: '140px', textAlign: 'left' },     editable: false,  editor: { type:"text" } },
   { dataField: 'tiptra',      text: 'Tiptra',         sort: true, align: "center",  headerOps: { width: '70px' },                         editable: false,  editor: { type:"text" } },
-  { dataField: 'vinculo',     text: 'Vínculo',        sort: true, align: "left",    headerOps: { width: '550px', textAlign: 'left' },     editable: false,   editor: { type:"text" } },
+  { dataField: 'vinculo',     text: 'Vínculo',        sort: true, align: "left",    headerOps: { width: '570px', textAlign: 'left' },     editable: false,   editor: { type:"text" } },
   // { dataField: 'link',        text: 'Link',           sort: true, align: "left",    headerOps: { width: '70px', textAlign: 'left' },      editable: false,  editor: { type:"text" } },
   { dataField: 'coment',      text: 'Comentario',     sort: true, align: "left",    headerOps: { width: '370px', textAlign: 'left' },     editable: true,   editor: { type:"text" } },
   { dataField: 'fecrec',      text: 'Fecha',          sort: true, align: "center",  headerOps: { width: '100px', textAlign: 'left' },     editable: false,  editor: { type:"text" } },

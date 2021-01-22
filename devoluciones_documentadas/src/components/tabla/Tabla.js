@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import cellEditFactory ,{ Type } from 'react-bootstrap-table2-editor';
+import cellEditFactory, { Type } from 'react-bootstrap-table2-editor';
 import BootstrapTable from 'react-bootstrap-table-next';
 import filterFactory, { textFilter } from 'react-bootstrap-table2-filter';
 import paginationFactory from 'react-bootstrap-table2-paginator';
@@ -7,16 +7,22 @@ import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit';
 import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
 import style from '../tablaDevoluciones/TablaDevoluciones.module.scss';
 import clientService from '../../services/devolucion.service';
-import {  Icon } from 'office-ui-fabric-react';
+import { Icon } from 'office-ui-fabric-react';
+import { TooltipHost, ITooltipHostStyles } from 'office-ui-fabric-react/lib/Tooltip';
+import { relative } from 'path';
+
 
 const { SearchBar } = Search;
+const calloutProps = { gapSpace: 0 };
 
 function Tabla(props) {
+  
 
   const [rows, setRows] = useState(props.rows);
   const [cols] = useState(getCols());
+  
 
-  useEffect(()=>{
+  useEffect(() => {
     setRows(props.rows)
   })
 
@@ -36,7 +42,7 @@ function Tabla(props) {
     paginationTotalRenderer: customTotal,
   }
 
-  
+
   function getCols() {
 
     let columns = []
@@ -48,7 +54,7 @@ function Tabla(props) {
         text: column.text,
         sort: column.sort,
         filter: textFilter({ placeholder: "Filtrar " + column.text }),
-        headerStyle: column.headerOps ,
+        headerStyle: column.headerOps,
         align: column.align,
         editable: column.editable,
         // editor: column.editor
@@ -58,36 +64,67 @@ function Tabla(props) {
         col = {
           ...col,
           filter: null,
-          editor: { type:Type.CHECKBOX, value: "Y:N"},
+          editor: { type: Type.CHECKBOX, value: "Y:N" },
           formatter: (cell, row, rowIndex) => {
             return (
               <span>
-                <input className={style.check} type="checkbox" checked={cell} onChange={()=>{}} ></input>
+                <input className={style.check} type="checkbox" checked={cell} onChange={() => { }} ></input>
               </span>
             );
           }
         }
-      }else if(column.dataField === "link"){
+      } else if (column.dataField === "vinculo") {
         col = {
           ...col,
           formatter: (cell, row, rowIndex) => {
-            if(row.vinculo){
-              return (
-                <div className={style.linkCell}>
-                  <a href={row.vinculo} target="_blank">
-                    <Icon iconName="OpenInNewTab" onClick={()=>{
-                      setTimeout(() => {
-                        window.open(row.vinculo, '_blank');
-                      }, 2000); // 1 second wasn't enough lol
-                      // window.open("http://127.0.0.1:8082"+row.vinculo, '_blank');
-                      
-                      }} />
-                  </a>
-                  {/* {cell} */}
+            let content = "Copiar"
+            return (
+              <div className={style.tooltip}>
+                <div >
+                  {cell}
+                  <TooltipHost
+                    tooltipProps={{
+                      onRenderContent: () => (
+                          <div id={"v-" + rowIndex} className={style.copyIcon}> {content} </div>
+                        ) 
+                    }}
+      
+                    id={"v-"+rowIndex}
+                    calloutProps={calloutProps}
+                    styles={{ root : { display: "inline-block", float:"right" }}}
+                  >
+                    {cell ? <Icon 
+                      iconName="Copy"
+                      className={style.copyIcon}
+                      onClick={() => {
+                          const el = document.createElement('textarea');
+                          el.value = cell;
+                          document.body.appendChild(el);
+                          el.select();
+                          document.execCommand('copy');
+                          document.body.removeChild(el);
+                          content = "Copiado!"
+      
+                          // var tooltip = document.getElementById("v-"+rowIndex);
+                          // tooltip.innerHTML = "Copiado!";
+
+                        }}
+                        onMouseOut={()=>{
+                      //     var tooltip = document.getElementById("v-"+rowIndex);
+                      //     // tooltip.innerHTML = "Copiar";
+                      //     // console.log(tooltip)
+                              content= "Copiar"
+                        }}
+                    >
+                    </Icon> : <></>}
+                    
+                  </TooltipHost>
+                  
+                  
                 </div>
-                // <a href={cell}> {cell} </a>
-              );
-            }
+              </div>
+            );
+
           }
         }
       }
@@ -118,7 +155,7 @@ function Tabla(props) {
       {rows.length !== 0 ?
         <ToolkitProvider
           keyField="_id"
-          search={{afterSearch}}
+          search={{ afterSearch }}
           data={rows}
           columns={cols}
         >
@@ -127,7 +164,7 @@ function Tabla(props) {
               <div>
                 <nav className="navbar navbar-light bg-light">
 
-                  <SearchBar {...props.searchProps} 
+                  <SearchBar {...props.searchProps}
                     placeholder="Buscar"
                   />
 
@@ -154,14 +191,14 @@ function Tabla(props) {
                       blurToSave: true,
 
                       afterSaveCell: (oldValue, newValue, row, column) => {
-                       console.log(newValue)
+                        console.log(newValue)
                         console.log(row)
-                        if(column.dataField == "eliminar"){
+                        if (column.dataField == "eliminar") {
                           newValue == 'Y' ? row.eliminar = true : row.eliminar = false
                         }
-                        
-                          saveCell(row)
-                        
+
+                        saveCell(row)
+
                       }
                     }
                   )}
