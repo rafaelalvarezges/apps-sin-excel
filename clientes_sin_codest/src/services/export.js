@@ -23,13 +23,13 @@ export default class Export extends React.Component {
         for(let i = 0; i < this.codigos.length; i++){
             console.log(this.datos[i])
             if(this.datos[i] != undefined){
-                let d = {...this.datos[i], "codigos": this.codigos[i]}
+                let d = {...this.datos[i], "":"", "codigos": this.codigos[i]}
                 this.datos[i] = d
             }else{
                 console.log("es undefined")
                 let d = this.datos
                 d.push({
-                    "":"",
+                    "_id":i,
                     "": "",
                     "": null,
                     "": "",
@@ -40,6 +40,7 @@ export default class Export extends React.Component {
                     "": "",
                     "": "",
                     "": "",
+                    "":"",
                     "codigos": this.codigos[i]
                 })
                 this.datos = d
@@ -65,7 +66,19 @@ export default class Export extends React.Component {
                          return <ExcelExportColumn field={col.dataField} title={col.text} key={index} />
                     })}
 
-                    <ExcelExportColumn field="codigos" title="Códigos" />
+                    <ExcelExportColumn 
+                        field=" " 
+                        title=""  headerCellOptions={{
+                        background: '#ffffff'
+                    }}/>   
+                    <ExcelExportColumn 
+                        field="codigos" 
+                        title="Códigos" 
+                        headerCellOptions={{
+                            background: '#e8e8e8',
+                            textAlign: 'center',
+                            color: '#000000'
+                        }}/>
                     
                 </ExcelExport> 
             </div>
