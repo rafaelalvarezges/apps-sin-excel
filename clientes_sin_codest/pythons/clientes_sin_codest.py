@@ -20,8 +20,8 @@ def carga_datos():
                     'nomdrv':'',
                     'vta_anio_ant':0.0, 
                     'vta_anio_actual':0.0,
-                    'eliminar': false,
-                    'mostrar': true
+                    'eliminar': False,
+                    'mostrar': True
                 }
 
     str_select = '''
