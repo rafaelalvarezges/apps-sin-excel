@@ -29,7 +29,7 @@ export default class Export extends React.Component {
                 console.log("es undefined")
                 let d = this.datos
                 d.push({
-                    "_id":i,
+                    "_id":"",
                     "": "",
                     "": null,
                     "": "",
@@ -61,9 +61,10 @@ export default class Export extends React.Component {
                     fileName="Listado.xlsx"
                     ref={(exporter) => { this._exporter = exporter; if(exporter)this.export() }}
                 >
+                    <ExcelExportColumn field="_id" title="Id" key={0}/>
                      {this.props.cols.map((col, index) =>{
                          this.lastItem = index
-                         return <ExcelExportColumn field={col.dataField} title={col.text} key={index} />
+                         return <ExcelExportColumn field={col.dataField} title={col.text} key={index + 1} />
                     })}
 
                     <ExcelExportColumn 
