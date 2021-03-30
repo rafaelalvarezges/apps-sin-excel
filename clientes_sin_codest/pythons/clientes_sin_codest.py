@@ -38,10 +38,10 @@ def carga_datos():
                 rac.nomdrv drv,
                 sum(case when to_char(to_date(sls.anymes,'YYYYMM'),'YYYY') = to_char(add_months(sysdate,-13),'yyyy') then sls.imp_vta else 0 end) Venta_ant,
                 sum(case when to_char(to_date(sls.anymes,'YYYYMM'),'YYYY') = to_char(add_months(sysdate,-1),'yyyy') then sls.imp_vta else 0 end) Venta_act
-        from RAC_COL_PRF_C@DWH rac, 
+        from RAC_COL_PRF_C rac, 
             clientes cli,  
-            v_resumen_asignaciones@dwh ra,   
-            sf_sls_50@DWH sls
+            v_resumen_asignaciones ra,   
+            sf_sls_50 sls
         where rac.idc = cli.numidc
             and (
                 (substr(rac.cliente,5) = to_char(cli.codcli))
