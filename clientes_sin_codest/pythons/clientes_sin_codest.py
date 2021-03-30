@@ -59,7 +59,7 @@ def carga_datos():
             and cli.codcli = sls.codcli
         group by rac.pdv,cli.codcli,rac.idc, rac.nomcli, rac.cad, cli.codest, rac.nomext, rac.nomdrv
         order by pdv, codcli
-        ) where nvl(venta_ant,0)+nvl(venta_act,0)>0;
+        ) where nvl(venta_ant,0)+nvl(venta_act,0)>0
     '''
 
     _, cur = conectar_oracle()
